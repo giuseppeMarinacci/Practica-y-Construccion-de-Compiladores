@@ -1,5 +1,7 @@
 // Generated from c:/Users/Giuseppe/Desktop/Practica y Construccion de Compiladores/Primo_progetto/demo/src/main/java/com/example/comp24.g4 by ANTLR 4.13.1
 
+// QUESTO SI USA PER FARE GENERAZIONE DI CODICE INTERMEDIO
+
 package com.example;
 
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
@@ -216,4 +218,10 @@ public interface comp24Visitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitParametro(comp24Parser.ParametroContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link comp24Parser#return}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitReturn(comp24Parser.ReturnContext ctx);
 }

@@ -1,5 +1,7 @@
 // Generated from c:/Users/Giuseppe/Desktop/Practica y Construccion de Compiladores/Primo_progetto/demo/src/main/java/com/example/comp24.g4 by ANTLR 4.13.1
 
+// QUESTO SI USA PER FARE ANALISI SEMANTICA
+
 package com.example;
 
 import org.antlr.v4.runtime.tree.ParseTreeListener;
@@ -349,4 +351,14 @@ public interface comp24Listener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitParametro(comp24Parser.ParametroContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link comp24Parser#return}.
+	 * @param ctx the parse tree
+	 */
+	void enterReturn(comp24Parser.ReturnContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link comp24Parser#return}.
+	 * @param ctx the parse tree
+	 */
+	void exitReturn(comp24Parser.ReturnContext ctx);
 }

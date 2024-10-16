@@ -1,8 +1,13 @@
-a = b = 0;
+int fact (int n); //declaracion
 
+int fact (int n){
+    return n * fact(n - 1);
+} // definicion
 
-int x, hola(int i, char j){}, y = 0;
+void main(){
+    int x = i = 0;
 
-hola (a, b);
+    i = fact (x);
 
-x = ciao();
+    return;
+}

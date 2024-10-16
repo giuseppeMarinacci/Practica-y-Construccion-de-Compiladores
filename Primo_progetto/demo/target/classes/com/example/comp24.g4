@@ -73,11 +73,13 @@ instruccion : declaraciones
             | while
             | bloque
             | asignaciones
+            | funcion_decl
             | funcion_call
             | if
             | for
             | exp
             | opal
+            | return
             ;
 
 bloque : LLA instrucciones LLC ;
@@ -212,3 +214,7 @@ parametro : opal
           | ID
           | NUMERO
           ;
+
+return : RETURN PYC
+        | RETURN opal PYC
+        ;

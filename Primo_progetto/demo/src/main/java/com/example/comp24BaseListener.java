@@ -422,6 +422,18 @@ public class comp24BaseListener implements comp24Listener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitParametro(comp24Parser.ParametroContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterReturn(comp24Parser.ReturnContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitReturn(comp24Parser.ReturnContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
