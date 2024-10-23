@@ -1,7 +1,5 @@
 // Generated from c:/Users/Giuseppe/Desktop/Practica y Construccion de Compiladores/Primo_progetto/demo/src/main/java/com/example/comp24.g4 by ANTLR 4.13.1
 
-// QUESTO SI USA PER FARE GENERAZIONE DI CODICE INTERMEDIO
-
 package com.example;
 
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;

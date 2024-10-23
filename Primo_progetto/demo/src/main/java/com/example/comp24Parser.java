@@ -908,9 +908,9 @@ public class comp24Parser extends Parser {
 		public ExpContext exp() {
 			return getRuleContext(ExpContext.class,0);
 		}
-		public TerminalNode COMPARACION() { return getToken(comp24Parser.COMPARACION, 0); }
 		public TerminalNode AND() { return getToken(comp24Parser.AND, 0); }
 		public TerminalNode OR() { return getToken(comp24Parser.OR, 0); }
+		public TerminalNode COMPARACION() { return getToken(comp24Parser.COMPARACION, 0); }
 		public OpalContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -990,11 +990,11 @@ public class comp24Parser extends Parser {
 						_localctx = new OpalContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_opal);
 						setState(162);
-						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
+						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
 						setState(163);
-						match(COMPARACION);
+						match(AND);
 						setState(164);
-						opal(6);
+						opal(5);
 						}
 						break;
 					case 2:
@@ -1002,11 +1002,11 @@ public class comp24Parser extends Parser {
 						_localctx = new OpalContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_opal);
 						setState(165);
-						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
+						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
 						setState(166);
-						match(AND);
+						match(OR);
 						setState(167);
-						opal(5);
+						opal(4);
 						}
 						break;
 					case 3:
@@ -1014,11 +1014,11 @@ public class comp24Parser extends Parser {
 						_localctx = new OpalContext(_parentctx, _parentState);
 						pushNewRecursionContext(_localctx, _startState, RULE_opal);
 						setState(168);
-						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
+						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
 						setState(169);
-						match(OR);
+						match(COMPARACION);
 						setState(170);
-						opal(4);
+						opal(3);
 						}
 						break;
 					}
@@ -2640,11 +2640,11 @@ public class comp24Parser extends Parser {
 	private boolean opal_sempred(OpalContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 0:
-			return precpred(_ctx, 5);
-		case 1:
 			return precpred(_ctx, 4);
-		case 2:
+		case 1:
 			return precpred(_ctx, 3);
+		case 2:
+			return precpred(_ctx, 2);
 		}
 		return true;
 	}
@@ -2765,11 +2765,11 @@ public class comp24Parser extends Parser {
 		"\u009e\u0005\f\u0000\u0000\u009e\u00a1\u0001\u0000\u0000\u0000\u009f\u00a1"+
 		"\u0003\n\u0005\u0000\u00a0\u0098\u0001\u0000\u0000\u0000\u00a0\u009b\u0001"+
 		"\u0000\u0000\u0000\u00a0\u009f\u0001\u0000\u0000\u0000\u00a1\u00ad\u0001"+
-		"\u0000\u0000\u0000\u00a2\u00a3\n\u0005\u0000\u0000\u00a3\u00a4\u0005\u001c"+
-		"\u0000\u0000\u00a4\u00ac\u0003\u0014\n\u0006\u00a5\u00a6\n\u0004\u0000"+
-		"\u0000\u00a6\u00a7\u0005\u0016\u0000\u0000\u00a7\u00ac\u0003\u0014\n\u0005"+
-		"\u00a8\u00a9\n\u0003\u0000\u0000\u00a9\u00aa\u0005\u0017\u0000\u0000\u00aa"+
-		"\u00ac\u0003\u0014\n\u0004\u00ab\u00a2\u0001\u0000\u0000\u0000\u00ab\u00a5"+
+		"\u0000\u0000\u0000\u00a2\u00a3\n\u0004\u0000\u0000\u00a3\u00a4\u0005\u0016"+
+		"\u0000\u0000\u00a4\u00ac\u0003\u0014\n\u0005\u00a5\u00a6\n\u0003\u0000"+
+		"\u0000\u00a6\u00a7\u0005\u0017\u0000\u0000\u00a7\u00ac\u0003\u0014\n\u0004"+
+		"\u00a8\u00a9\n\u0002\u0000\u0000\u00a9\u00aa\u0005\u001c\u0000\u0000\u00aa"+
+		"\u00ac\u0003\u0014\n\u0003\u00ab\u00a2\u0001\u0000\u0000\u0000\u00ab\u00a5"+
 		"\u0001\u0000\u0000\u0000\u00ab\u00a8\u0001\u0000\u0000\u0000\u00ac\u00af"+
 		"\u0001\u0000\u0000\u0000\u00ad\u00ab\u0001\u0000\u0000\u0000\u00ad\u00ae"+
 		"\u0001\u0000\u0000\u0000\u00ae\u0015\u0001\u0000\u0000\u0000\u00af\u00ad"+

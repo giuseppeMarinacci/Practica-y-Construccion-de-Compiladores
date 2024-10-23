@@ -113,12 +113,14 @@ factor : PA exp PC
 
 // mis incorporaciones
 
+// MODIFICAR
+
 // orden de las operacciones logicas: !, comparaciones, &&, ||
 opal : NOT opal
-     | opal COMPARACION opal
+     | PA opal PC
      | opal AND opal
      | opal OR opal
-     | PA opal PC
+     | opal COMPARACION opal
      | exp
      ;
 

@@ -28,7 +28,7 @@ public class TablaSimbolos {
         }
     }
 
-    public void addIdentificador(String nombre, ID id) {
+    public void addIdentificador(ID id) {
         if (!contextos.isEmpty()) {
             contextos.get(contextos.size() - 1).addId(id);
         }
@@ -96,8 +96,24 @@ enum TipoDato {
     INT,
     DOUBLE,
     CHAR,
-    VOID
+    VOID;
+
+    public static TipoDato fromString(String s) {
+        switch (s) {
+            case "int":
+                return INT;
+            case "double":
+                return DOUBLE;
+            case "char":
+                return CHAR;
+            case "void":
+                return VOID;
+            default:
+                return null;
+        }
+    }
 }
+
 
 class Variable extends ID {
 
