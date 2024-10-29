@@ -64,8 +64,9 @@ instruccion : declaraciones
             | while
             | bloque
             | asignaciones
-            | funcion_decl
-            | funcion_call
+            | funcion_prototipo
+            | funcion_definicion
+            | funcion_llamada
             | if
             | for
             | exp
@@ -98,7 +99,7 @@ factor : PA exp PC
        | NUMERO
        | ID
        | <assoc=right> RESTA factor
-       | func_call
+       | func_llamada
        ;
 
 
@@ -154,10 +155,10 @@ declaraciones : tdato decl PYC;
 
 decl : declaracion COMA decl
       | asign COMA decl // | asignaciones COMA decl   VERSIONE PRECEDENTE FUNZIONANTE
-      | funcion_decl COMA decl
+      //| funcion_definicion COMA decl
       | asign // | asignaciones   VERSIONE PRECEDENTE FUNZIONANTE
       | declaracion
-      | funcion_decl
+      //| funcion_definicion
       ;
 
 declaracion : ID;
@@ -173,7 +174,7 @@ asignaciones : asign PYC;
 
 asign : ID ASIGN asign
              | asignacion
-             | func_call
+             | func_llamada
              ;
 
 asignacion : ID ASIGN (opal | ID | NUMERO) 
@@ -182,8 +183,10 @@ asignacion : ID ASIGN (opal | ID | NUMERO)
            | ID OPERADOR_ASIGNACION (opal | ID | NUMERO)
            */;
 
-// funcion_decl es necesario para las declaraciones de las funciones
-funcion_decl : ID PA argumentos? PC bloque ;
+
+/*
+ * FUNCIONES
+ */
 
 argumentos : argumento COMA argumentos
            | argumento
@@ -191,9 +194,15 @@ argumentos : argumento COMA argumentos
 
 argumento : tdato ID ;
 
-funcion_call : func_call PYC ;
+funcion_prototipo : tdato ID PA argumentos? PC PYC ;
 
-func_call : ID PA parametros? PC;
+
+funcion_definicion : tdato ID PA argumentos? PC bloque ;
+
+
+funcion_llamada : func_llamada PYC ;
+
+func_llamada : ID PA parametros? PC;
 
 parametros : parametro COMA parametros
            | parametro
@@ -203,6 +212,7 @@ parametro : opal
           | ID
           | NUMERO
           ;
+
 
 return : RETURN PYC
         | RETURN opal PYC

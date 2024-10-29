@@ -1,4 +1,4 @@
-int fact (int n); //declaracion
+int fact (int n); // prototipo
 
 int fact (int n){
     return n * fact(n - 1);
