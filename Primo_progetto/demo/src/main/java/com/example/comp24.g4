@@ -60,10 +60,10 @@ instrucciones : instruccion instrucciones
               | 
               ;
 
-instruccion : declaraciones
+instruccion : declaracion PYC
             | while
             | bloque
-            | asignaciones
+            | asignacion PYC
             | funcion_prototipo
             | funcion_definicion
             | funcion_llamada
@@ -155,8 +155,7 @@ acciones_iniciales : accion_inicial COMA acciones_iniciales
                    ;
 
 accion_inicial : opales
-               | decl
-               //| numeros  // questa riga è stata rimossa perchè i numeri nel for vengono catalogati come una opal che ha solo un factor. Nel caso in cui sia necessario reintrodurli, fare in modo di mettere "numeros" per primo e di metterlo in esclusione con "opal" e con "decl"
+               | declaracion
                ;
 
 acciones_siempre : accion_siempre COMA acciones_siempre
@@ -164,7 +163,7 @@ acciones_siempre : accion_siempre COMA acciones_siempre
                  ;
 
 accion_siempre : opales
-               | decl
+               | declaracion
                ;
 
 acciones_post : accion_post COMA acciones_post
@@ -172,7 +171,7 @@ acciones_post : accion_post COMA acciones_post
               ;
 
 accion_post : opales
-            | decl
+            | declaracion
             ;
 
 
@@ -182,37 +181,26 @@ accion_post : opales
  * DECLARACIONES Y ASIGNACIONES
  */
 
-declaraciones : tdato decl PYC;
+declaracion : tdato ID inicializacion list_decl ;
 
-decl : declaracion COMA decl
-      | asign COMA decl // | asignaciones COMA decl   VERSIONE PRECEDENTE FUNZIONANTE
-      //| funcion_definicion COMA decl
-      | asign // | asignaciones   VERSIONE PRECEDENTE FUNZIONANTE
-      | declaracion
-      //| funcion_definicion
-      ;
+inicializacion : ASIGN opal
+               | ASIGN ID list_asign
+               |
+               ;
 
-declaracion : ID;
+list_decl : COMA ID inicializacion list_decl
+          |
+          ;
 
-/* VERSIONE PRECEDENTE FUNZIONANTE
-asignaciones : ID ASIGN asignaciones
-             | asignacion PYC?
-             | func_call
-             ;
-*/
+asignacion : ID ASIGN opal
+           | ID ASIGN ID list_asign ;
 
-asignaciones : asign PYC;
-
-asign : ID ASIGN asign
-             | asignacion
-             | func_llamada
-             ;
-
-asignacion : ID ASIGN (opal | ID | NUMERO) 
-           /*| ID OPERADOR_UNARIO
-           | OPERADOR_UNARIO ID
-           | ID OPERADOR_ASIGNACION (opal | ID | NUMERO)
-           */;
+list_asign : ASIGN ID list_asign
+           | ASIGN func_llamada
+           | ASIGN NUMERO
+           | ASIGN opal
+           |
+           ;
 
 
 
