@@ -1,4 +1,4 @@
-// Generated from c:/Users/Giuseppe/Desktop/Practica y Construccion de Compiladores/Primo_progetto/demo/src/main/java/com/example/comp24.g4 by ANTLR 4.13.1
+// Generated from c:/Users/Giuseppe/Desktop/Practica y Construccion de Compiladores/Primo_progetto/demo/target/classes/com/example/comp24.g4 by ANTLR 4.13.1
 
 package com.example;
 

@@ -22,8 +22,8 @@ VOID : 'void' ;
 COMA : ',' ;
 PA : '(' ;
 PC : ')' ;
-LLA : '{' ; // llave que abre
-LLC : '}' ; // llave que cerra
+LLA : '{' ;
+LLC : '}' ;
 ASIGN : '=' ;
 PYC : ';' ;
 SUMA : '+' ;
@@ -35,35 +35,26 @@ AND: '&&' ;
 OR: '||' ;
 NOT: '!' ;
 
-// LINEA : ( LETRA | DIGITO | [ {}=;+*] )*'\n' ;
+NUMERO : DIGITO+ ;
 ID : (LETRA | '_')(LETRA | DIGITO | '_')* ;
 OPERADOR_UNARIO : '++' | '--' ;
 OPERADOR_BINARIO : '+' | '-' | '*' | '/' | '%' | '^' ;
-//OPERADOR_ASIGNACION : '+=' | '-=' | '*=' | '/=' | '%=' | '^=' ;
 COMPARACION : '==' | '!=' | '<' | '>' | '<=' | '>=' ;
+
+//OPERADOR_ASIGNACION : '+=' | '-=' | '*=' | '/=' | '%=' | '^=' ;
 // TYPE: 'int' | 'double' | 'char' | 'void' ; // QUESTO è SCORRETTO PERCHè QUESTA è UNA ESPRESSIONE REGOLARE, MENTRE IL tdato è UNA REGOLA GRAMMATICALE
-NUMERO : DIGITO+ ;
 
 WS : [ \t\n\r] -> skip ;
+COMENTARIO : '//' ~[\r\n]* -> skip ;
 
-/*OTRO : . ;
+/*
+ *
+ * DEFINICIóN DE LAS REGLAS GRAMáTICALES
+ *
+ */
 
-s : ID { System.out.println("ID->" + $ID.getText() + "<--"); } s
-  | NUMERO { System.out.println("NUMERO->" + $NUMERO.getText() + "<--"); } s
-  | OTRO { System.out.println("OTRO->" + $OTRO.getText() + "<--"); } s
-  | DIGITO { System.out.println("DIGITO->" + $DIGITO.getText() + "<--"); } s
-  | EOF
-;
 
-si : s EOF ;
-
-s : PA s PC s
-  |
-  ;
-
-*/
-
-programa : instrucciones EOF ; // regla inicial o start rule
+programa : instrucciones EOF ; // regla inicial
 
 instrucciones : instruccion instrucciones
               | 
@@ -110,10 +101,6 @@ factor : PA exp PC
        | func_call
        ;
 
-
-// mis incorporaciones
-
-// MODIFICAR
 
 // orden de las operacciones logicas: !, comparaciones, &&, ||
 opal : NOT opal
