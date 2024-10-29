@@ -67,7 +67,7 @@ instruccion : declaraciones
             | funcion_prototipo
             | funcion_definicion
             | funcion_llamada
-            | if
+            | if_instruccion
             | for
             | exp
             | opal
@@ -76,7 +76,31 @@ instruccion : declaraciones
 
 bloque : LLA instrucciones LLC ;
 
-while : WHILE PA (opal | ID) PC instruccion ; 
+tdato : INT
+      | DOUBLE
+      | CHAR
+      | VOID
+      ;
+
+
+
+
+/*
+ * OPERACIONES ARTIMETICAS Y LOGICAS
+ */
+
+opales : opal COMA opales
+       | opal
+       ;
+
+// orden de las operacciones logicas: !, comparaciones, &&, ||
+opal : NOT opal
+     | PA opal PC
+     | opal AND opal
+     | opal OR opal
+     | opal COMPARACION opal
+     | exp
+     ;
 
 exp : term e ; // exp es una operacion aritmetica, por ejemplo: a + b / (c + d)
 
@@ -103,16 +127,26 @@ factor : PA exp PC
        ;
 
 
-// orden de las operacciones logicas: !, comparaciones, &&, ||
-opal : NOT opal
-     | PA opal PC
-     | opal AND opal
-     | opal OR opal
-     | opal COMPARACION opal
-     | exp
-     ;
 
-if : IF PA opal PC (instruccion | instruccion ELSE instruccion) ;
+
+/*
+ * CONSTRUCCIONES CONDICIONALES
+ */
+
+if_instruccion : IF PA opal PC instruccion else_instruccion ;
+
+else_instruccion : ELSE IF PA opal PC instruccion else_instruccion
+                   | ELSE instruccion 
+                   | ;
+
+
+
+
+/*
+ * CONSTRUCCIONES ITERATIVAS
+ */
+
+while : WHILE PA (opal | ID) PC instruccion ; 
 
 for : FOR PA acciones_iniciales? PYC acciones_siempre? PYC acciones_post? PC instruccion? ;
 
@@ -141,15 +175,12 @@ accion_post : opales
             | decl
             ;
 
-opales : opal COMA opales
-       | opal
-       ;
 
-tdato : INT
-      | DOUBLE
-      | CHAR
-      | VOID
-      ;
+
+
+/*
+ * DECLARACIONES Y ASIGNACIONES
+ */
 
 declaraciones : tdato decl PYC;
 
@@ -184,21 +215,21 @@ asignacion : ID ASIGN (opal | ID | NUMERO)
            */;
 
 
+
+
 /*
  * FUNCIONES
  */
+
+funcion_prototipo : tdato ID PA argumentos? PC PYC ;
+
+funcion_definicion : tdato ID PA argumentos? PC bloque ;
 
 argumentos : argumento COMA argumentos
            | argumento
            ;
 
 argumento : tdato ID ;
-
-funcion_prototipo : tdato ID PA argumentos? PC PYC ;
-
-
-funcion_definicion : tdato ID PA argumentos? PC bloque ;
-
 
 funcion_llamada : func_llamada PYC ;
 
@@ -213,6 +244,12 @@ parametro : opal
           | NUMERO
           ;
 
+
+
+
+/*
+ * RETURN
+ */
 
 return : RETURN PYC
         | RETURN opal PYC

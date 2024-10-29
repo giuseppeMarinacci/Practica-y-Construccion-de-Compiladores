@@ -1,13 +1,26 @@
-int fact (int n); // prototipo
+if (a)
+    a = 1;
 
-int fact (int n){
-    return n * fact(n - 1);
-} // definicion
+if (b){
+    b = 2;
+}
+else{
 
-void main(){
-    int x = i = 0;
+}
 
-    i = fact (x);
+if (c){
+    c = 3;
+}
+else if (c - 1){
+    c = 4;
+}
 
-    return;
+if (d){
+    d = 5;
+}
+else if (d - 1){
+    d = 6;
+}
+else {
+    d = 7;
 }
