@@ -50,15 +50,95 @@ public interface comp24Listener extends ParseTreeListener {
 	 */
 	void exitBloque(comp24Parser.BloqueContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link comp24Parser#while}.
+	 * Enter a parse tree produced by {@link comp24Parser#tdato}.
 	 * @param ctx the parse tree
 	 */
-	void enterWhile(comp24Parser.WhileContext ctx);
+	void enterTdato(comp24Parser.TdatoContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link comp24Parser#while}.
+	 * Exit a parse tree produced by {@link comp24Parser#tdato}.
 	 * @param ctx the parse tree
 	 */
-	void exitWhile(comp24Parser.WhileContext ctx);
+	void exitTdato(comp24Parser.TdatoContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link comp24Parser#opales}.
+	 * @param ctx the parse tree
+	 */
+	void enterOpales(comp24Parser.OpalesContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link comp24Parser#opales}.
+	 * @param ctx the parse tree
+	 */
+	void exitOpales(comp24Parser.OpalesContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link comp24Parser#opal}.
+	 * @param ctx the parse tree
+	 */
+	void enterOpal(comp24Parser.OpalContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link comp24Parser#opal}.
+	 * @param ctx the parse tree
+	 */
+	void exitOpal(comp24Parser.OpalContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link comp24Parser#or_expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterOr_expr(comp24Parser.Or_exprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link comp24Parser#or_expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitOr_expr(comp24Parser.Or_exprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link comp24Parser#o}.
+	 * @param ctx the parse tree
+	 */
+	void enterO(comp24Parser.OContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link comp24Parser#o}.
+	 * @param ctx the parse tree
+	 */
+	void exitO(comp24Parser.OContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link comp24Parser#and_expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterAnd_expr(comp24Parser.And_exprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link comp24Parser#and_expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitAnd_expr(comp24Parser.And_exprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link comp24Parser#a}.
+	 * @param ctx the parse tree
+	 */
+	void enterA(comp24Parser.AContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link comp24Parser#a}.
+	 * @param ctx the parse tree
+	 */
+	void exitA(comp24Parser.AContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link comp24Parser#not_expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterNot_expr(comp24Parser.Not_exprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link comp24Parser#not_expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitNot_expr(comp24Parser.Not_exprContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link comp24Parser#comp}.
+	 * @param ctx the parse tree
+	 */
+	void enterComp(comp24Parser.CompContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link comp24Parser#comp}.
+	 * @param ctx the parse tree
+	 */
+	void exitComp(comp24Parser.CompContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link comp24Parser#exp}.
 	 * @param ctx the parse tree
@@ -110,25 +190,35 @@ public interface comp24Listener extends ParseTreeListener {
 	 */
 	void exitFactor(comp24Parser.FactorContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link comp24Parser#opal}.
+	 * Enter a parse tree produced by {@link comp24Parser#if_instruccion}.
 	 * @param ctx the parse tree
 	 */
-	void enterOpal(comp24Parser.OpalContext ctx);
+	void enterIf_instruccion(comp24Parser.If_instruccionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link comp24Parser#opal}.
+	 * Exit a parse tree produced by {@link comp24Parser#if_instruccion}.
 	 * @param ctx the parse tree
 	 */
-	void exitOpal(comp24Parser.OpalContext ctx);
+	void exitIf_instruccion(comp24Parser.If_instruccionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link comp24Parser#if}.
+	 * Enter a parse tree produced by {@link comp24Parser#else_instruccion}.
 	 * @param ctx the parse tree
 	 */
-	void enterIf(comp24Parser.IfContext ctx);
+	void enterElse_instruccion(comp24Parser.Else_instruccionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link comp24Parser#if}.
+	 * Exit a parse tree produced by {@link comp24Parser#else_instruccion}.
 	 * @param ctx the parse tree
 	 */
-	void exitIf(comp24Parser.IfContext ctx);
+	void exitElse_instruccion(comp24Parser.Else_instruccionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link comp24Parser#while}.
+	 * @param ctx the parse tree
+	 */
+	void enterWhile(comp24Parser.WhileContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link comp24Parser#while}.
+	 * @param ctx the parse tree
+	 */
+	void exitWhile(comp24Parser.WhileContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link comp24Parser#for}.
 	 * @param ctx the parse tree
@@ -200,46 +290,6 @@ public interface comp24Listener extends ParseTreeListener {
 	 */
 	void exitAccion_post(comp24Parser.Accion_postContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link comp24Parser#opales}.
-	 * @param ctx the parse tree
-	 */
-	void enterOpales(comp24Parser.OpalesContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link comp24Parser#opales}.
-	 * @param ctx the parse tree
-	 */
-	void exitOpales(comp24Parser.OpalesContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link comp24Parser#tdato}.
-	 * @param ctx the parse tree
-	 */
-	void enterTdato(comp24Parser.TdatoContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link comp24Parser#tdato}.
-	 * @param ctx the parse tree
-	 */
-	void exitTdato(comp24Parser.TdatoContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link comp24Parser#declaraciones}.
-	 * @param ctx the parse tree
-	 */
-	void enterDeclaraciones(comp24Parser.DeclaracionesContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link comp24Parser#declaraciones}.
-	 * @param ctx the parse tree
-	 */
-	void exitDeclaraciones(comp24Parser.DeclaracionesContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link comp24Parser#decl}.
-	 * @param ctx the parse tree
-	 */
-	void enterDecl(comp24Parser.DeclContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link comp24Parser#decl}.
-	 * @param ctx the parse tree
-	 */
-	void exitDecl(comp24Parser.DeclContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link comp24Parser#declaracion}.
 	 * @param ctx the parse tree
 	 */
@@ -250,25 +300,25 @@ public interface comp24Listener extends ParseTreeListener {
 	 */
 	void exitDeclaracion(comp24Parser.DeclaracionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link comp24Parser#asignaciones}.
+	 * Enter a parse tree produced by {@link comp24Parser#inicializacion}.
 	 * @param ctx the parse tree
 	 */
-	void enterAsignaciones(comp24Parser.AsignacionesContext ctx);
+	void enterInicializacion(comp24Parser.InicializacionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link comp24Parser#asignaciones}.
+	 * Exit a parse tree produced by {@link comp24Parser#inicializacion}.
 	 * @param ctx the parse tree
 	 */
-	void exitAsignaciones(comp24Parser.AsignacionesContext ctx);
+	void exitInicializacion(comp24Parser.InicializacionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link comp24Parser#asign}.
+	 * Enter a parse tree produced by {@link comp24Parser#list_decl}.
 	 * @param ctx the parse tree
 	 */
-	void enterAsign(comp24Parser.AsignContext ctx);
+	void enterList_decl(comp24Parser.List_declContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link comp24Parser#asign}.
+	 * Exit a parse tree produced by {@link comp24Parser#list_decl}.
 	 * @param ctx the parse tree
 	 */
-	void exitAsign(comp24Parser.AsignContext ctx);
+	void exitList_decl(comp24Parser.List_declContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link comp24Parser#asignacion}.
 	 * @param ctx the parse tree
@@ -280,15 +330,35 @@ public interface comp24Listener extends ParseTreeListener {
 	 */
 	void exitAsignacion(comp24Parser.AsignacionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link comp24Parser#funcion_decl}.
+	 * Enter a parse tree produced by {@link comp24Parser#list_asign}.
 	 * @param ctx the parse tree
 	 */
-	void enterFuncion_decl(comp24Parser.Funcion_declContext ctx);
+	void enterList_asign(comp24Parser.List_asignContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link comp24Parser#funcion_decl}.
+	 * Exit a parse tree produced by {@link comp24Parser#list_asign}.
 	 * @param ctx the parse tree
 	 */
-	void exitFuncion_decl(comp24Parser.Funcion_declContext ctx);
+	void exitList_asign(comp24Parser.List_asignContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link comp24Parser#funcion_prototipo}.
+	 * @param ctx the parse tree
+	 */
+	void enterFuncion_prototipo(comp24Parser.Funcion_prototipoContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link comp24Parser#funcion_prototipo}.
+	 * @param ctx the parse tree
+	 */
+	void exitFuncion_prototipo(comp24Parser.Funcion_prototipoContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link comp24Parser#funcion_definicion}.
+	 * @param ctx the parse tree
+	 */
+	void enterFuncion_definicion(comp24Parser.Funcion_definicionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link comp24Parser#funcion_definicion}.
+	 * @param ctx the parse tree
+	 */
+	void exitFuncion_definicion(comp24Parser.Funcion_definicionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link comp24Parser#argumentos}.
 	 * @param ctx the parse tree
@@ -310,25 +380,25 @@ public interface comp24Listener extends ParseTreeListener {
 	 */
 	void exitArgumento(comp24Parser.ArgumentoContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link comp24Parser#funcion_call}.
+	 * Enter a parse tree produced by {@link comp24Parser#funcion_llamada}.
 	 * @param ctx the parse tree
 	 */
-	void enterFuncion_call(comp24Parser.Funcion_callContext ctx);
+	void enterFuncion_llamada(comp24Parser.Funcion_llamadaContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link comp24Parser#funcion_call}.
+	 * Exit a parse tree produced by {@link comp24Parser#funcion_llamada}.
 	 * @param ctx the parse tree
 	 */
-	void exitFuncion_call(comp24Parser.Funcion_callContext ctx);
+	void exitFuncion_llamada(comp24Parser.Funcion_llamadaContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link comp24Parser#func_call}.
+	 * Enter a parse tree produced by {@link comp24Parser#func_llamada}.
 	 * @param ctx the parse tree
 	 */
-	void enterFunc_call(comp24Parser.Func_callContext ctx);
+	void enterFunc_llamada(comp24Parser.Func_llamadaContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link comp24Parser#func_call}.
+	 * Exit a parse tree produced by {@link comp24Parser#func_llamada}.
 	 * @param ctx the parse tree
 	 */
-	void exitFunc_call(comp24Parser.Func_callContext ctx);
+	void exitFunc_llamada(comp24Parser.Func_llamadaContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link comp24Parser#parametros}.
 	 * @param ctx the parse tree

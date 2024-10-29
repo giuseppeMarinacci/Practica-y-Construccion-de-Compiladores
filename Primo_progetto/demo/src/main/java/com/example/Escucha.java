@@ -5,7 +5,7 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 import com.example.comp24Parser.BloqueContext;
 import com.example.comp24Parser.DeclaracionContext;
-import com.example.comp24Parser.DeclaracionesContext;
+//import com.example.comp24Parser.DeclaracionesContext;
 import com.example.comp24Parser.ProgramaContext;
 
 //import com.example.TablaSimbolos;
@@ -55,10 +55,10 @@ public class Escucha extends comp24BaseListener{
         TablaSimbolos.getInstance().addContexto();
     }
 
-    @Override
+    /*@Override
     public void exitDeclaraciones(DeclaracionesContext ctx) {
         Variable id = new Variable(ctx.getText(), TipoDato.fromString(ctx.getChild(0).getText()));
         TablaSimbolos.getInstance().addIdentificador(id);
-    }
+    }*/
     
 }

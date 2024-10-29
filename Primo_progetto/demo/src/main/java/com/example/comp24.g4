@@ -86,14 +86,15 @@ tdato : INT
 
 
 /*
- * OPERACIONES ARTIMETICAS Y LOGICAS
+ * OPERACIONES ARTIMETICO-LOGICAS
+ * orden de las operacciones logicas: !, comparaciones, &&, ||
  */
 
 opales : opal COMA opales
        | opal
        ;
 
-// orden de las operacciones logicas: !, comparaciones, &&, ||
+/* VERSION PRECEDENTE DE OPAL
 opal : NOT opal
      | PA opal PC
      | opal AND opal
@@ -101,6 +102,48 @@ opal : NOT opal
      | opal COMPARACION opal
      | exp
      ;
+*/
+
+/* VERSION UN POCO MAS COMPRENSIBLE
+opal: and_expr ;
+
+and_expr : or_expr (AND or_expr)* ;
+
+or_expr : comp (OR comp)* ;
+
+comp: NOT comp
+    | PA opal PC
+    | exp (COMPARACION exp)? ;
+*/
+
+
+opal : or_expr ;
+
+or_expr : and_expr o ;
+
+o : OR and_expr o
+  | 
+  ;
+
+and_expr : not_expr a ;
+
+a : AND not_expr a
+  | 
+  ;
+
+not_expr : NOT not_expr
+         | PA opal PC
+         | comp
+         ;
+
+comp : exp (COMPARACION exp)? ;
+
+
+
+
+/*
+ * OPERACIONES ARTIMETICAS
+ */
 
 exp : term e ; // exp es una operacion aritmetica, por ejemplo: a + b / (c + d)
 

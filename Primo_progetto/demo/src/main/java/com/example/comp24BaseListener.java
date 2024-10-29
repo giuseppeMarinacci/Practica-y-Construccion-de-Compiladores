@@ -67,13 +67,109 @@ public class comp24BaseListener implements comp24Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterWhile(comp24Parser.WhileContext ctx) { }
+	@Override public void enterTdato(comp24Parser.TdatoContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitWhile(comp24Parser.WhileContext ctx) { }
+	@Override public void exitTdato(comp24Parser.TdatoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOpales(comp24Parser.OpalesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOpales(comp24Parser.OpalesContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOpal(comp24Parser.OpalContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOpal(comp24Parser.OpalContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOr_expr(comp24Parser.Or_exprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOr_expr(comp24Parser.Or_exprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterO(comp24Parser.OContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitO(comp24Parser.OContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAnd_expr(comp24Parser.And_exprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAnd_expr(comp24Parser.And_exprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterA(comp24Parser.AContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitA(comp24Parser.AContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNot_expr(comp24Parser.Not_exprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNot_expr(comp24Parser.Not_exprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterComp(comp24Parser.CompContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitComp(comp24Parser.CompContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -139,25 +235,37 @@ public class comp24BaseListener implements comp24Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOpal(comp24Parser.OpalContext ctx) { }
+	@Override public void enterIf_instruccion(comp24Parser.If_instruccionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitOpal(comp24Parser.OpalContext ctx) { }
+	@Override public void exitIf_instruccion(comp24Parser.If_instruccionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterIf(comp24Parser.IfContext ctx) { }
+	@Override public void enterElse_instruccion(comp24Parser.Else_instruccionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitIf(comp24Parser.IfContext ctx) { }
+	@Override public void exitElse_instruccion(comp24Parser.Else_instruccionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterWhile(comp24Parser.WhileContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitWhile(comp24Parser.WhileContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -247,54 +355,6 @@ public class comp24BaseListener implements comp24Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOpales(comp24Parser.OpalesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitOpales(comp24Parser.OpalesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterTdato(comp24Parser.TdatoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTdato(comp24Parser.TdatoContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDeclaraciones(comp24Parser.DeclaracionesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDeclaraciones(comp24Parser.DeclaracionesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterDecl(comp24Parser.DeclContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitDecl(comp24Parser.DeclContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterDeclaracion(comp24Parser.DeclaracionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -307,25 +367,25 @@ public class comp24BaseListener implements comp24Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAsignaciones(comp24Parser.AsignacionesContext ctx) { }
+	@Override public void enterInicializacion(comp24Parser.InicializacionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAsignaciones(comp24Parser.AsignacionesContext ctx) { }
+	@Override public void exitInicializacion(comp24Parser.InicializacionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAsign(comp24Parser.AsignContext ctx) { }
+	@Override public void enterList_decl(comp24Parser.List_declContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitAsign(comp24Parser.AsignContext ctx) { }
+	@Override public void exitList_decl(comp24Parser.List_declContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -343,13 +403,37 @@ public class comp24BaseListener implements comp24Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFuncion_decl(comp24Parser.Funcion_declContext ctx) { }
+	@Override public void enterList_asign(comp24Parser.List_asignContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFuncion_decl(comp24Parser.Funcion_declContext ctx) { }
+	@Override public void exitList_asign(comp24Parser.List_asignContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFuncion_prototipo(comp24Parser.Funcion_prototipoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFuncion_prototipo(comp24Parser.Funcion_prototipoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterFuncion_definicion(comp24Parser.Funcion_definicionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFuncion_definicion(comp24Parser.Funcion_definicionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -379,25 +463,25 @@ public class comp24BaseListener implements comp24Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFuncion_call(comp24Parser.Funcion_callContext ctx) { }
+	@Override public void enterFuncion_llamada(comp24Parser.Funcion_llamadaContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFuncion_call(comp24Parser.Funcion_callContext ctx) { }
+	@Override public void exitFuncion_llamada(comp24Parser.Funcion_llamadaContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFunc_call(comp24Parser.Func_callContext ctx) { }
+	@Override public void enterFunc_llamada(comp24Parser.Func_llamadaContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitFunc_call(comp24Parser.Func_callContext ctx) { }
+	@Override public void exitFunc_llamada(comp24Parser.Func_llamadaContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
