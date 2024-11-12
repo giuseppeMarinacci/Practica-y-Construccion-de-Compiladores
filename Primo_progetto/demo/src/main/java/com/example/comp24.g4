@@ -191,9 +191,7 @@ while : WHILE PA opal PC instruccion ;
 
 for : FOR PA accion_inicial? PYC accion_siempre? PYC accion_post? PC instruccion? ;
 
-accion_inicial : asignacion
-               | declaracion
-               ;
+accion_inicial : asignacion ;
 
 accion_siempre : opal ;
 

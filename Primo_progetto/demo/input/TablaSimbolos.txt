@@ -11,7 +11,6 @@ Almacena para cada ID:
 
 Ademàs, para los ID de funcion:
     - Lista de tipo de datos de los argumentos
-    - 
 
 Funcionalidades de la Tabla de simbolos
     - Agregar ID

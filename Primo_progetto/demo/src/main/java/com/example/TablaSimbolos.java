@@ -83,6 +83,10 @@ abstract class ID {
         return nombre;
     }
 
+    public TipoDato getTipoDato() {
+        return tdato;
+    }
+
     public void setInicializado() {
         this.inicializado = true;
     }
@@ -124,14 +128,14 @@ class Variable extends ID {
 
 class Funcion extends ID {
 
-    private List<TipoDato> args;
+    private LinkedList<Variable> args;
 
-    public Funcion(String nombre, TipoDato tdato, List<TipoDato> args) {
+    public Funcion(String nombre, TipoDato tdato, LinkedList<Variable> args) {
         super(nombre, tdato);
         this.args = args;
     }
 
-    public List<TipoDato> getArgs() {
+    public LinkedList<Variable> getArgs() {
         return args;
     }
 }
