@@ -4,6 +4,16 @@ grammar comp24;
 package com.example;
 }
 
+
+
+/*
+ *
+ * DEFINICIÓN DE LAS EXPRESIONES REGULARES
+ *
+ */
+
+
+
 // fragment dice di non catturare un simbolo, perchè mi serve catturarlo per creare una regular expression (definite come ID, NUMERO, OTRO)
 fragment LETRA : [A-Za-z] ;
 fragment DIGITO : [0-9] ;
@@ -40,18 +50,19 @@ ID : (LETRA | '_')(LETRA | DIGITO | '_')* ;
 OPERADOR_UNARIO : '++' | '--' ;
 OPERADOR_BINARIO : '+' | '-' | '*' | '/' | '%' | '^' ;
 COMPARACION : '==' | '!=' | '<' | '>' | '<=' | '>=' ;
-
 //OPERADOR_ASIGNACION : '+=' | '-=' | '*=' | '/=' | '%=' | '^=' ;
-// TYPE: 'int' | 'double' | 'char' | 'void' ; // QUESTO è SCORRETTO PERCHè QUESTA è UNA ESPRESSIONE REGOLARE, MENTRE IL tdato è UNA REGOLA GRAMMATICALE
 
 WS : [ \t\n\r] -> skip ;
 COMENTARIO : '//' ~[\r\n]* -> skip ;
 
+
+
 /*
  *
- * DEFINICIóN DE LAS REGLAS GRAMáTICALES
+ * DEFINICIÓN DE LAS REGLAS GRAMÁTICALES
  *
  */
+
 
 
 programa : instrucciones EOF ; // regla inicial
@@ -60,17 +71,17 @@ instrucciones : instruccion instrucciones
               | 
               ;
 
-instruccion : declaracion PYC
-            | while
-            | bloque
+instruccion : bloque
+            | declaracion PYC
             | asignacion PYC
             | funcion_prototipo
             | funcion_definicion
             | funcion_llamada
             | if_instruccion
             | for
-            | exp
+            | while
             | opal
+            | exp
             | return
             ;
 
@@ -89,20 +100,6 @@ tdato : INT
  * OPERACIONES ARTIMETICO-LOGICAS
  * orden de las operacciones logicas: !, comparaciones, &&, ||
  */
-
-opales : opal COMA opales
-       | opal
-       ;
-
-/* VERSION PRECEDENTE DE OPAL
-opal : NOT opal
-     | PA opal PC
-     | opal AND opal
-     | opal OR opal
-     | opal COMPARACION opal
-     | exp
-     ;
-*/
 
 /* VERSION UN POCO MAS COMPRENSIBLE
 opal: and_expr ;
@@ -145,7 +142,7 @@ comp : exp (COMPARACION exp)? ;
  * OPERACIONES ARTIMETICAS
  */
 
-exp : term e ; // exp es una operacion aritmetica, por ejemplo: a + b / (c + d)
+exp : term e ;
 
 e: SUMA term e
  | RESTA term e
@@ -161,8 +158,8 @@ t: MULT factor t
  ;
 
 factor : PA exp PC
-       | ID OPERADOR_UNARIO // mia aggiunta
-       | OPERADOR_UNARIO ID // mia aggiunta
+       | ID OPERADOR_UNARIO
+       | OPERADOR_UNARIO ID
        | NUMERO
        | ID
        | <assoc=right> RESTA factor
@@ -179,8 +176,9 @@ factor : PA exp PC
 if_instruccion : IF PA opal PC instruccion else_instruccion ;
 
 else_instruccion : ELSE IF PA opal PC instruccion else_instruccion
-                   | ELSE instruccion 
-                   | ;
+                 | ELSE instruccion 
+                 |
+                 ;
 
 
 
@@ -189,32 +187,18 @@ else_instruccion : ELSE IF PA opal PC instruccion else_instruccion
  * CONSTRUCCIONES ITERATIVAS
  */
 
-while : WHILE PA (opal | ID) PC instruccion ; 
+while : WHILE PA opal PC instruccion ;
 
-for : FOR PA acciones_iniciales? PYC acciones_siempre? PYC acciones_post? PC instruccion? ;
+for : FOR PA accion_inicial? PYC accion_siempre? PYC accion_post? PC instruccion? ;
 
-acciones_iniciales : accion_inicial COMA acciones_iniciales
-                   | accion_inicial
-                   ;
-
-accion_inicial : opales
+accion_inicial : asignacion
                | declaracion
                ;
 
-acciones_siempre : accion_siempre COMA acciones_siempre
-                 | accion_siempre
-                 ;
+accion_siempre : opal ;
 
-accion_siempre : opales
-               | declaracion
-               ;
-
-acciones_post : accion_post COMA acciones_post
-              | accion_post
-              ;
-
-accion_post : opales
-            | declaracion
+accion_post : asignacion
+            | opal
             ;
 
 
@@ -283,5 +267,5 @@ parametro : opal
  */
 
 return : RETURN PYC
-        | RETURN opal PYC
-        ;
+       | RETURN opal PYC
+       ;

@@ -79,18 +79,6 @@ public class comp24BaseListener implements comp24Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOpales(comp24Parser.OpalesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitOpales(comp24Parser.OpalesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterOpal(comp24Parser.OpalContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -283,18 +271,6 @@ public class comp24BaseListener implements comp24Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAcciones_iniciales(comp24Parser.Acciones_inicialesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAcciones_iniciales(comp24Parser.Acciones_inicialesContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterAccion_inicial(comp24Parser.Accion_inicialContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -307,18 +283,6 @@ public class comp24BaseListener implements comp24Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterAcciones_siempre(comp24Parser.Acciones_siempreContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAcciones_siempre(comp24Parser.Acciones_siempreContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterAccion_siempre(comp24Parser.Accion_siempreContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -326,18 +290,6 @@ public class comp24BaseListener implements comp24Listener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAccion_siempre(comp24Parser.Accion_siempreContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterAcciones_post(comp24Parser.Acciones_postContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitAcciones_post(comp24Parser.Acciones_postContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

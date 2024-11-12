@@ -43,12 +43,6 @@ public interface comp24Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTdato(comp24Parser.TdatoContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link comp24Parser#opales}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOpales(comp24Parser.OpalesContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link comp24Parser#opal}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -145,35 +139,17 @@ public interface comp24Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFor(comp24Parser.ForContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link comp24Parser#acciones_iniciales}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAcciones_iniciales(comp24Parser.Acciones_inicialesContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link comp24Parser#accion_inicial}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitAccion_inicial(comp24Parser.Accion_inicialContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link comp24Parser#acciones_siempre}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAcciones_siempre(comp24Parser.Acciones_siempreContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link comp24Parser#accion_siempre}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitAccion_siempre(comp24Parser.Accion_siempreContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link comp24Parser#acciones_post}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAcciones_post(comp24Parser.Acciones_postContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link comp24Parser#accion_post}.
 	 * @param ctx the parse tree
