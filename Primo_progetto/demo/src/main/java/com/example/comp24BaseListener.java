@@ -163,6 +163,18 @@ public class comp24BaseListener implements comp24Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterCo(comp24Parser.CoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCo(comp24Parser.CoContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterExp(comp24Parser.ExpContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -355,18 +367,6 @@ public class comp24BaseListener implements comp24Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterList_asign(comp24Parser.List_asignContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitList_asign(comp24Parser.List_asignContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterFuncion_prototipo(comp24Parser.Funcion_prototipoContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -391,13 +391,13 @@ public class comp24BaseListener implements comp24Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterArgumentos(comp24Parser.ArgumentosContext ctx) { }
+	@Override public void enterLista_argumentos(comp24Parser.Lista_argumentosContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitArgumentos(comp24Parser.ArgumentosContext ctx) { }
+	@Override public void exitLista_argumentos(comp24Parser.Lista_argumentosContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -439,13 +439,13 @@ public class comp24BaseListener implements comp24Listener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParametros(comp24Parser.ParametrosContext ctx) { }
+	@Override public void enterLista_parametros(comp24Parser.Lista_parametrosContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitParametros(comp24Parser.ParametrosContext ctx) { }
+	@Override public void exitLista_parametros(comp24Parser.Lista_parametrosContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

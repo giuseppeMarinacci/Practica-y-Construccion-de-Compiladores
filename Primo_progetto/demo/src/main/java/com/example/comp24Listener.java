@@ -130,6 +130,16 @@ public interface comp24Listener extends ParseTreeListener {
 	 */
 	void exitComp(comp24Parser.CompContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link comp24Parser#co}.
+	 * @param ctx the parse tree
+	 */
+	void enterCo(comp24Parser.CoContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link comp24Parser#co}.
+	 * @param ctx the parse tree
+	 */
+	void exitCo(comp24Parser.CoContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link comp24Parser#exp}.
 	 * @param ctx the parse tree
 	 */
@@ -290,16 +300,6 @@ public interface comp24Listener extends ParseTreeListener {
 	 */
 	void exitAsignacion(comp24Parser.AsignacionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link comp24Parser#list_asign}.
-	 * @param ctx the parse tree
-	 */
-	void enterList_asign(comp24Parser.List_asignContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link comp24Parser#list_asign}.
-	 * @param ctx the parse tree
-	 */
-	void exitList_asign(comp24Parser.List_asignContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link comp24Parser#funcion_prototipo}.
 	 * @param ctx the parse tree
 	 */
@@ -320,15 +320,15 @@ public interface comp24Listener extends ParseTreeListener {
 	 */
 	void exitFuncion_definicion(comp24Parser.Funcion_definicionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link comp24Parser#argumentos}.
+	 * Enter a parse tree produced by {@link comp24Parser#lista_argumentos}.
 	 * @param ctx the parse tree
 	 */
-	void enterArgumentos(comp24Parser.ArgumentosContext ctx);
+	void enterLista_argumentos(comp24Parser.Lista_argumentosContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link comp24Parser#argumentos}.
+	 * Exit a parse tree produced by {@link comp24Parser#lista_argumentos}.
 	 * @param ctx the parse tree
 	 */
-	void exitArgumentos(comp24Parser.ArgumentosContext ctx);
+	void exitLista_argumentos(comp24Parser.Lista_argumentosContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link comp24Parser#argumento}.
 	 * @param ctx the parse tree
@@ -360,15 +360,15 @@ public interface comp24Listener extends ParseTreeListener {
 	 */
 	void exitFunc_llamada(comp24Parser.Func_llamadaContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link comp24Parser#parametros}.
+	 * Enter a parse tree produced by {@link comp24Parser#lista_parametros}.
 	 * @param ctx the parse tree
 	 */
-	void enterParametros(comp24Parser.ParametrosContext ctx);
+	void enterLista_parametros(comp24Parser.Lista_parametrosContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link comp24Parser#parametros}.
+	 * Exit a parse tree produced by {@link comp24Parser#lista_parametros}.
 	 * @param ctx the parse tree
 	 */
-	void exitParametros(comp24Parser.ParametrosContext ctx);
+	void exitLista_parametros(comp24Parser.Lista_parametrosContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link comp24Parser#parametro}.
 	 * @param ctx the parse tree

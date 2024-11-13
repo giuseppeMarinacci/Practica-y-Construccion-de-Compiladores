@@ -115,6 +115,18 @@ int fact (int n){
     return n * fact(n - 1);
 } // definicion
 
+int ciao(); // prototipo sin parametros
+
+int ciao_2 (int a, int b, char c, double d); // prototipo con muchos parametros
+
+int ciao (){ // definición sin parametros
+    int x = 0;
+}
+
+int ciao_2 (int a, int b, char c, double d){  // definición con muchos parametros
+    int y = a + b;
+}
+
 void main(){
     int x = i = 0;
 

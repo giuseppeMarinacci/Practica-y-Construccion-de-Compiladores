@@ -85,6 +85,12 @@ public interface comp24Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitComp(comp24Parser.CompContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link comp24Parser#co}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCo(comp24Parser.CoContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link comp24Parser#exp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -181,12 +187,6 @@ public interface comp24Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAsignacion(comp24Parser.AsignacionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link comp24Parser#list_asign}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitList_asign(comp24Parser.List_asignContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link comp24Parser#funcion_prototipo}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -199,11 +199,11 @@ public interface comp24Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFuncion_definicion(comp24Parser.Funcion_definicionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link comp24Parser#argumentos}.
+	 * Visit a parse tree produced by {@link comp24Parser#lista_argumentos}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitArgumentos(comp24Parser.ArgumentosContext ctx);
+	T visitLista_argumentos(comp24Parser.Lista_argumentosContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link comp24Parser#argumento}.
 	 * @param ctx the parse tree
@@ -223,11 +223,11 @@ public interface comp24Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunc_llamada(comp24Parser.Func_llamadaContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link comp24Parser#parametros}.
+	 * Visit a parse tree produced by {@link comp24Parser#lista_parametros}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitParametros(comp24Parser.ParametrosContext ctx);
+	T visitLista_parametros(comp24Parser.Lista_parametrosContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link comp24Parser#parametro}.
 	 * @param ctx the parse tree

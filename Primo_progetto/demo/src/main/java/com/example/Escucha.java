@@ -10,15 +10,16 @@ import com.example.comp24Parser.DeclaracionContext;
 import com.example.comp24Parser.ProgramaContext;
 import com.example.comp24Parser.Funcion_definicionContext;
 import com.example.comp24Parser.FactorContext;
-import com.example.comp24Parser.ForContext;
-import com.example.comp24Parser.WhileContext;
-import com.example.comp24Parser.If_instruccionContext;
-import com.example.comp24Parser.Else_instruccionContext;
-//import com.example.TablaSimbolos;
+
 
 public class Escucha extends comp24BaseListener{
     private TablaSimbolos tablaSimbolos = TablaSimbolos.getInstance();
     
+    /*
+     * tenemos que generar un archivo de texto donde imprimir 
+     * todas los contextos antes de borrarlos
+     */
+
     @Override
     public void enterPrograma(ProgramaContext ctx) {
         tablaSimbolos.addContexto();
@@ -51,10 +52,12 @@ public class Escucha extends comp24BaseListener{
     public void exitBloque(BloqueContext ctx) {
         
         /* 
-         * pregunta para el profe: ¿Se debe chequear si estamos en una funcion para chequear si el tipo del
-         * return coincide con el tipo de la declaracion de la funcion?
+         * Se debe chequear si estamos en una funcion para chequear si el tipo del
+         * return coincide con el tipo de la declaracion de la funcion!
          */
         
+        // escribir el contexto en el archivo antes de borrarlo
+
         TablaSimbolos.getInstance().delContexto();
     }
 
@@ -69,7 +72,8 @@ public class Escucha extends comp24BaseListener{
         */
 
         /* 
-         * pregunta para el profe: ¿Se debe chequear si la variable ya fue declarada en el mismo contexto?
+         * 1. Se debe chequear si la variable ya fue declarada en el contexto local
+         * 2. Se debe chequear que el tipo de una variable no sea "VOID"
          */
         Variable id = new Variable(ctx.getChild(1).getText(), TipoDato.fromString(ctx.getChild(0).getText()));
         TablaSimbolos.getInstance().addIdentificador(id);
@@ -94,57 +98,5 @@ public class Escucha extends comp24BaseListener{
         }
     }
 
-
-
-    /* Pregunta para el profe:
-    ¿Las siguiente son correctas?
-    O se debe llamar addContexto solamente cuando se crea un nuevo bloque de codigo?
-    */
-
-    @Override
-    public void enterFor(ForContext ctx) {
-        TablaSimbolos.getInstance().addContexto();
-    }
-
-    @Override
-    public void exitFor(ForContext ctx) {
-        TablaSimbolos.getInstance().delContexto();
-    }
-
-
-
-    @Override
-    public void enterWhile(WhileContext ctx) {
-        TablaSimbolos.getInstance().addContexto();
-    }
-
-    @Override
-    public void exitWhile(WhileContext ctx) {
-        TablaSimbolos.getInstance().delContexto();
-    }
-	
-
-
-    @Override
-    public void enterIf_instruccion(If_instruccionContext ctx) {
-        TablaSimbolos.getInstance().addContexto();
-    }
-
-    @Override
-    public void exitIf_instruccion(If_instruccionContext ctx) {
-        TablaSimbolos.getInstance().delContexto();
-    }
-
-
-
-    @Override
-    public void enterElse_instruccion(Else_instruccionContext ctx) {
-        TablaSimbolos.getInstance().addContexto();
-    }
-    
-    @Override
-    public void exitElse_instruccion(Else_instruccionContext ctx) {
-        TablaSimbolos.getInstance().delContexto();
-    }
 	
 }

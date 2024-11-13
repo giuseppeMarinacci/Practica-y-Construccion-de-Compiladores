@@ -48,9 +48,7 @@ NOT: '!' ;
 NUMERO : DIGITO+ ;
 ID : (LETRA | '_')(LETRA | DIGITO | '_')* ;
 OPERADOR_UNARIO : '++' | '--' ;
-OPERADOR_BINARIO : '+' | '-' | '*' | '/' | '%' | '^' ;
 COMPARACION : '==' | '!=' | '<' | '>' | '<=' | '>=' ;
-//OPERADOR_ASIGNACION : '+=' | '-=' | '*=' | '/=' | '%=' | '^=' ;
 
 WS : [ \t\n\r] -> skip ;
 COMENTARIO : '//' ~[\r\n]* -> skip ;
@@ -65,7 +63,7 @@ COMENTARIO : '//' ~[\r\n]* -> skip ;
 
 
 
-programa : instrucciones EOF ; // regla inicial
+programa : instrucciones EOF ; // REGLA INICIAL
 
 instrucciones : instruccion instrucciones
               | 
@@ -101,19 +99,6 @@ tdato : INT
  * orden de las operacciones logicas: !, comparaciones, &&, ||
  */
 
-/* VERSION UN POCO MAS COMPRENSIBLE
-opal: and_expr ;
-
-and_expr : or_expr (AND or_expr)* ;
-
-or_expr : comp (OR comp)* ;
-
-comp: NOT comp
-    | PA opal PC
-    | exp (COMPARACION exp)? ;
-*/
-
-
 opal : or_expr ;
 
 or_expr : and_expr o ;
@@ -129,11 +114,15 @@ a : AND not_expr a
   ;
 
 not_expr : NOT not_expr
-         | PA opal PC
+         | PA opal PC // evaluación: creo que no hay manera de substituirlo
          | comp
          ;
 
-comp : exp (COMPARACION exp)? ;
+comp : exp co;
+
+co : COMPARACION exp
+   |
+   ;
 
 
 
@@ -157,7 +146,7 @@ t: MULT factor t
  |
  ;
 
-factor : PA exp PC
+factor : PA exp PC  // evaluación: creo que no hay manera de substituirlo
        | ID OPERADOR_UNARIO
        | OPERADOR_UNARIO ID
        | NUMERO
@@ -175,8 +164,7 @@ factor : PA exp PC
 
 if_instruccion : IF PA opal PC instruccion else_instruccion ;
 
-else_instruccion : ELSE IF PA opal PC instruccion else_instruccion
-                 | ELSE instruccion 
+else_instruccion : ELSE instruccion 
                  |
                  ;
 
@@ -189,14 +177,19 @@ else_instruccion : ELSE IF PA opal PC instruccion else_instruccion
 
 while : WHILE PA opal PC instruccion ;
 
-for : FOR PA accion_inicial? PYC accion_siempre? PYC accion_post? PC instruccion? ;
+for : FOR PA accion_inicial PYC accion_siempre PYC accion_post PC instruccion ;
 
-accion_inicial : asignacion ;
+accion_inicial : asignacion
+               |
+               ;
 
-accion_siempre : opal ;
+accion_siempre : opal
+               |
+               ;
 
 accion_post : asignacion
             | opal
+            |
             ;
 
 
@@ -209,7 +202,6 @@ accion_post : asignacion
 declaracion : tdato ID inicializacion list_decl ;
 
 inicializacion : ASIGN opal
-               | ASIGN ID list_asign
                |
                ;
 
@@ -217,15 +209,7 @@ list_decl : COMA ID inicializacion list_decl
           |
           ;
 
-asignacion : ID ASIGN opal
-           | ID ASIGN ID list_asign ;
-
-list_asign : ASIGN ID list_asign
-           | ASIGN func_llamada
-           | ASIGN NUMERO
-           | ASIGN opal
-           |
-           ;
+asignacion : ID ASIGN opal ;
 
 
 
@@ -234,27 +218,28 @@ list_asign : ASIGN ID list_asign
  * FUNCIONES
  */
 
-funcion_prototipo : tdato ID PA argumentos? PC PYC ;
+funcion_prototipo : tdato ID PA argumento lista_argumentos PC PYC ;
 
-funcion_definicion : tdato ID PA argumentos? PC bloque ;
+funcion_definicion : tdato ID PA argumento lista_argumentos PC bloque ;
 
-argumentos : argumento COMA argumentos
-           | argumento
-           ;
+lista_argumentos : COMA argumento lista_argumentos
+                 |
+                 ;
 
-argumento : tdato ID ;
+argumento : tdato ID
+          |
+          ;
 
 funcion_llamada : func_llamada PYC ;
 
-func_llamada : ID PA parametros? PC;
+func_llamada : ID PA parametro lista_parametros PC;
 
-parametros : parametro COMA parametros
-           | parametro
-           ;
+lista_parametros : COMA parametro lista_parametros
+                 |
+                 ;
 
-parametro : opal
-          | ID
-          | NUMERO
+parametro : opal 
+          |
           ;
 
 
