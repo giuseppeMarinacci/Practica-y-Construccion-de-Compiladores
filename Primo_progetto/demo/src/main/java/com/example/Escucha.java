@@ -11,7 +11,7 @@ import com.example.comp24Parser.DeclaracionContext;
 import com.example.comp24Parser.ProgramaContext;
 import com.example.comp24Parser.Funcion_definicionContext;
 import com.example.comp24Parser.FactorContext;
-
+import com.example.comp24Parser.Lista_argumentosContext;
 
 public class Escucha extends comp24BaseListener{
     private TablaSimbolos tablaSimbolos = TablaSimbolos.getInstance();
@@ -30,6 +30,7 @@ public class Escucha extends comp24BaseListener{
         }
     }
 
+
     @Override
     public void enterPrograma(ProgramaContext ctx) {
         delFile(absoluteFilePath);
@@ -39,28 +40,55 @@ public class Escucha extends comp24BaseListener{
         tablaSimbolos.addContexto();        
     }
 
+
     @Override
     public void exitPrograma(ProgramaContext ctx) {
         tablaSimbolos.delContexto(absoluteFilePath);
     }
 
 
-
     @Override
     public void enterBloque(BloqueContext ctx) {
         TablaSimbolos.getInstance().addContexto();
-
-        // si el bloque es hijo de la definición una función, se agrega el contexto de la función
+        
+        // si el bloque es hijo de la definición de una función, se agrega el contexto de la función
         if (ctx.getParent() instanceof Funcion_definicionContext) {
-            Funcion funcion = (Funcion) tablaSimbolos.buscarGlobal(ctx.getParent().getChild(0).getChild(1).getText());
-            LinkedList<Variable> parametros = funcion.getArgs();
-            
-            for(int i = 0; i < parametros.size(); i++) {
-                Variable id = new Variable(parametros.get(i).getNombre(), parametros.get(i).getTipoDato());
-                TablaSimbolos.getInstance().addIdentificador(id);
+            Funcion_definicionContext funcion_padre = (Funcion_definicionContext) ctx.getParent();
+            LinkedList<Variable> args = new LinkedList<Variable>();
+            String nombre;
+            TipoDato tipo;
+
+            if (funcion_padre.getChild(3).getChild(0) != null) { // si la función tiene el primero argumento
+                nombre = funcion_padre.getChild(3).getChild(1).getText();
+                tipo = TipoDato.fromString(funcion_padre.getChild(3).getChild(0).getText());
+                args.add(new Variable(nombre, tipo)); // se añade el primer argumento
+
+                if(funcion_padre.getChild(4).getChildCount() > 0){ // si la función tiene el segundo argumento
+                    Lista_argumentosContext lista_argumentos = (Lista_argumentosContext) funcion_padre.getChild(4);
+                    
+                    nombre = lista_argumentos.getChild(1).getChild(1).getText();
+                    tipo = TipoDato.fromString(lista_argumentos.getChild(1).getChild(0).getText());
+                    args.add(new Variable(nombre, tipo)); // se añade el segundo argumento
+
+                    while(lista_argumentos.getChild(2).getChildCount() > 0){ // mientras la función tenga más de dos argumento
+                        lista_argumentos = (Lista_argumentosContext) lista_argumentos.getChild(2);
+                        
+                        nombre = lista_argumentos.getChild(1).getChild(1).getText();
+                        tipo = TipoDato.fromString(lista_argumentos.getChild(1).getChild(0).getText());
+                        args.add(new Variable(nombre, tipo)); // se añade el siguiente argumento
+                    }
+
+
+                }            
+            }
+
+            for(Variable arg : args) { // se añaden los argumentos al contexto
+                TablaSimbolos.getInstance().addIdentificador(arg);
             }
         }
+        
     }
+
     
     @Override
     public void exitBloque(BloqueContext ctx) {
@@ -69,12 +97,71 @@ public class Escucha extends comp24BaseListener{
          * Se debe chequear si estamos en una funcion para chequear si el tipo del
          * return coincide con el tipo de la declaracion de la funcion!
          */
-        
-
+        /*
+        if (ctx.getParent() instanceof Funcion_definicionContext) {
+            Funcion funcion = (Funcion) tablaSimbolos.buscarGlobal(ctx.getParent().getChild(0).getChild(1).getText());
+            if (funcion.getTipoDato() != TipoDato.VOID) {
+                if (ctx.getChild(ctx.getChildCount() - 1) instanceof FactorContext) {
+                    FactorContext factor = (FactorContext) ctx.getChild(ctx.getChildCount() - 1);
+                    if (factor.ID() != null) {
+                        ID id = tablaSimbolos.buscarGlobal(factor.ID().getText());
+                        if (id != null) {
+                            if (id instanceof Variable) {
+                                if (((Variable) id).getTipoDato() != funcion.getTipoDato()) {
+                                    System.err.println("Error semántico: tipo de retorno de la función " + funcion.getNombre() + " no coincide con el tipo de la declaración.");
+                                }
+                            }
+                        }
+                    }
+                }
+            } 
+        }
+        */
         TablaSimbolos.getInstance().delContexto(absoluteFilePath);
     }
 
 
+    @Override
+    public void exitFuncion_definicion(Funcion_definicionContext ctx) {
+        /*
+        System.out.println("Analizando la funcion: " + ctx.getChild(1).getText());
+        LinkedList<Variable> args = new LinkedList<Variable>();
+        String nombre;
+        TipoDato tipo;
+
+        if (ctx.getChild(3).getChild(0) != null) { // si la función tiene el primero argumento
+            nombre = ctx.getChild(3).getChild(1).getText();
+            tipo = TipoDato.fromString(ctx.getChild(3).getChild(0).getText());
+            args.add(new Variable(nombre, tipo)); // se añade el primer argumento
+            // System.out.println("Primer argumento: " + ctx.getChild(3).getChild(0).getText() + " " + nombre);
+
+            if(ctx.getChild(4).getChildCount() > 0){ // si la función tiene el segundo argumento
+                Lista_argumentosContext lista_argumentos = (Lista_argumentosContext) ctx.getChild(4);
+                
+                nombre = lista_argumentos.getChild(1).getChild(1).getText();
+                tipo = TipoDato.fromString(lista_argumentos.getChild(1).getChild(0).getText());
+                args.add(new Variable(nombre, tipo)); // se añade el segundo argumento
+                // System.err.println("Segundo argumento: " + lista_argumentos.getChild(1).getChild(0).getText() + " " + nombre);
+
+                while(lista_argumentos.getChild(2).getChildCount() > 0){ // mientras la lista de argumentos tenga más de dos argumento
+                    lista_argumentos = (Lista_argumentosContext) lista_argumentos.getChild(2);
+                    
+                    nombre = lista_argumentos.getChild(1).getChild(1).getText();
+                    tipo = TipoDato.fromString(lista_argumentos.getChild(1).getChild(0).getText());
+                    args.add(new Variable(nombre, tipo)); // se añade el siguiente argumento
+                    // System.err.println("Argumento: " + lista_argumentos.getChild(1).getChild(0).getText() + " " + nombre);
+                }
+            }            
+        }
+        
+        Funcion funcion = new Funcion(ctx.getChild(1).getText(), // nombre de la función
+                                    TipoDato.fromString(ctx.getChild(0).getText()), // tipo de la función
+                                    args // lista de argumentos
+                                    );
+        */
+
+        TablaSimbolos.getInstance().addIdentificador(new Variable(ctx.getChild(1).getText(), TipoDato.fromString(ctx.getChild(0).getText())));
+    }
 
     @Override
     public void exitDeclaracion(DeclaracionContext ctx) {

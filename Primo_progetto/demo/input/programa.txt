@@ -1,3 +1,8 @@
-int fact (int n){
-    return a;
+int fact (int n, int x, int y, char z, double j, int k){
+    int a;
+} // definicion
+
+
+int abc(){
+    int b;
 }
