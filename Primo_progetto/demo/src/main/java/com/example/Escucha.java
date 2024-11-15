@@ -1,5 +1,6 @@
 package com.example;
 
+import java.io.File;
 import java.util.LinkedList;
 
 //import org.antlr.v4.runtime.ParserRuleContext;
@@ -14,20 +15,33 @@ import com.example.comp24Parser.FactorContext;
 
 public class Escucha extends comp24BaseListener{
     private TablaSimbolos tablaSimbolos = TablaSimbolos.getInstance();
-    
+    String absoluteFilePath = "C:\\Users\\Giuseppe\\Desktop\\Practica y Construccion de Compiladores\\Primo_progetto\\demo\\output\\tablaSimbolos.txt";    // path del archivo de texto donde se guardan la tabla de simbolos
+
     /*
      * tenemos que generar un archivo de texto donde imprimir 
      * todas los contextos antes de borrarlos
      */
+    
+    // Borrar archivo
+    public void delFile(String filePath) {
+        File file = new File(filePath);
+        if (file.exists()) {
+            file.delete();
+        }
+    }
 
     @Override
     public void enterPrograma(ProgramaContext ctx) {
-        tablaSimbolos.addContexto();
+        delFile(absoluteFilePath);
+
+        System.out.println("Empezando a escuchar...");
+
+        tablaSimbolos.addContexto();        
     }
 
     @Override
     public void exitPrograma(ProgramaContext ctx) {
-        tablaSimbolos.delContexto();
+        tablaSimbolos.delContexto(absoluteFilePath);
     }
 
 
@@ -56,9 +70,8 @@ public class Escucha extends comp24BaseListener{
          * return coincide con el tipo de la declaracion de la funcion!
          */
         
-        // escribir el contexto en el archivo antes de borrarlo
 
-        TablaSimbolos.getInstance().delContexto();
+        TablaSimbolos.getInstance().delContexto(absoluteFilePath);
     }
 
 

@@ -1,6 +1,7 @@
 package com.example;
 
 import java.util.*;
+import java.io.*;
 
 public class TablaSimbolos {
 
@@ -22,8 +23,9 @@ public class TablaSimbolos {
         contextos.add(new Contexto());
     }
 
-    public void delContexto() {
+    public void delContexto(String absoluteFilePath) {
         if (!contextos.isEmpty()) {
+            contextos.get(contextos.size() - 1).imprimirContexto(absoluteFilePath);
             contextos.remove(contextos.size() - 1);
         }
     }
@@ -63,6 +65,27 @@ class Contexto {
     public void addId(ID id) {
         simbolos.put(id.getNombre(), id);
     }
+
+    public void imprimirContexto(String absoluteFilePath) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(absoluteFilePath, true))) {
+            // cabecera
+            writer.write("\n---------------- Contexto ----------------\n");
+            writer.write(String.format("%-15s%-10s%-10s%-16s", "NAME", "TYPE", "USED", "INITIALIZED"));
+            writer.write("\n---------------------------------------------------\n");
+            
+            // contenido
+            for (ID id : simbolos.values()) {
+                String name = id.getNombre();
+                TipoDato type = id.getTipoDato();
+                String used = String.valueOf(id.getUsado());
+                String initialized = String.valueOf(id.getInicializado());
+
+                writer.write(String.format("%-15s%-10s%-10s%-18s\n", name, type, used, initialized));
+            }
+        } catch (Exception e) {
+            System.out.println("Unable to write file: " + absoluteFilePath);
+        }
+    }
 }
 
 abstract class ID {
@@ -87,8 +110,16 @@ abstract class ID {
         return tdato;
     }
 
+    public boolean getInicializado() {
+        return this.inicializado;
+    }
+
     public void setInicializado() {
         this.inicializado = true;
+    }
+
+    public boolean getUsado() {
+        return this.usado;
     }
 
     public void setUsado() {
