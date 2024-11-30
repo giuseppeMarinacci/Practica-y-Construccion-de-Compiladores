@@ -1,6 +1,6 @@
-void sum (int a1, int b1){
-    return a;
-}
+//void sum (int a1, int b1){
+//    return a;
+//}
 
 int fact (int n, int x, int y, char z, double j, int k){
     int a;
@@ -9,5 +9,5 @@ int fact (int n, int x, int y, char z, double j, int k){
 
     x = a;
 
-    return sum(a, x);
+    return a;
 } // definicion

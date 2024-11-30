@@ -52,6 +52,17 @@ public class TablaSimbolos {
         }
         return null;
     }
+
+    public ArrayList<ID> buscarNoUsados(){
+        ArrayList<ID> ids = contextos.get(contextos.size() - 1).getSimbolos();
+        ArrayList<ID> no_utilizados = new ArrayList<>();
+        for (ID id : ids) {
+            if (!id.getUsado()) {
+                    no_utilizados.add(id);
+                }
+            }
+        return no_utilizados;
+    }
 }
 
 class Contexto {
@@ -85,6 +96,10 @@ class Contexto {
         } catch (Exception e) {
             System.out.println("Unable to write file: " + absoluteFilePath);
         }
+    }
+
+    public ArrayList<ID> getSimbolos() {
+        return new ArrayList<>(simbolos.values());
     }
 }
 

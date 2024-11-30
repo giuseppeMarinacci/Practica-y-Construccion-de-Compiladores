@@ -2,14 +2,8 @@
 -------------------- Contexto ---------------------
 NAME           TYPE      USED      INITIALIZED     
 ---------------------------------------------------
-a1             INT       false     false             
-b1             INT       false     false             
-
--------------------- Contexto ---------------------
-NAME           TYPE      USED      INITIALIZED     
----------------------------------------------------
 a              INT       false     true              
-x              INT       false     true              
+x              INT       false     false             
 y              INT       false     false             
 z              CHAR      false     false             
 j              DOUBLE    false     false             
@@ -20,4 +14,3 @@ n              INT       false     false
 NAME           TYPE      USED      INITIALIZED     
 ---------------------------------------------------
 fact           INT       false     false             
-sum            VOID      false     false             

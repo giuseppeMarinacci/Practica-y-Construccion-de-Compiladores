@@ -2,6 +2,7 @@ package com.example;
 
 import java.io.File;
 import java.util.LinkedList;
+import java.util.ArrayList;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 //import org.antlr.v4.runtime.tree.TerminalNode;
@@ -21,11 +22,6 @@ public class Escucha extends comp24BaseListener{
     String absoluteFilePath = "C:\\Users\\Giuseppe\\Desktop\\Practica y Construccion de Compiladores\\Primo_progetto\\demo\\output\\tablaSimbolos.txt";    // path del archivo de texto donde se guardan la tabla de simbolos
     // opcional: resolverlo con path relativo
 
-    /*
-     * tenemos que generar un archivo de texto donde imprimir 
-     * todos los contextos antes de borrarlos
-     */
-    
     // Borrar archivo
     public void delFile(String filePath) {
         File file = new File(filePath);
@@ -137,6 +133,13 @@ public class Escucha extends comp24BaseListener{
                 }
             }
         }
+
+        ArrayList<ID> no_usadas = TablaSimbolos.getInstance().buscarNoUsados();
+        if (no_usadas.size() > 0) {
+            for (ID id : no_usadas) {
+                System.err.println("Warning: variable \"" + id.getNombre() + "\" declarada pero no usada.");
+            }
+        }
         
         TablaSimbolos.getInstance().delContexto(absoluteFilePath);
     }
@@ -176,6 +179,8 @@ public class Escucha extends comp24BaseListener{
             }
         }
     }
+
+
 
     // Chequear que el tipo de retorno de una función sea correspondiente al tipo de la instrucción "return"
     Boolean correspondiente(ParserRuleContext ctx, TipoDato tipo_funcion){
