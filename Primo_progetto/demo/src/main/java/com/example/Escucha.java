@@ -152,14 +152,25 @@ public class Escucha extends comp24BaseListener{
     }
 
 
+    /* Funciones de exitDeclaracion:
+     * - Chequear si la variable ya fue declarada en el contexto local
+     * - Chequear que el tipo de una variable no sea "VOID"
+     */
     @Override
     public void exitDeclaracion(DeclaracionContext ctx) {
-        /* 
-         * 1. Se debe chequear si la variable ya fue declarada en el contexto local
-         * 2. Se debe chequear que el tipo de una variable no sea "VOID"
-         */
-        Variable id = new Variable(ctx.getChild(1).getText(), TipoDato.fromString(ctx.getChild(0).getText()));
-        TablaSimbolos.getInstance().addIdentificador(id);
+        String nombre = ctx.getChild(1).getText();
+        TipoDato tipo = TipoDato.fromString(ctx.getChild(0).getText());
+
+        if(tipo == TipoDato.VOID){
+            System.err.println("Error semántico: variable \"" + nombre + "\" no puede ser de tipo VOID.");
+        }
+        else if (TablaSimbolos.getInstance().buscarLocal(nombre) != null) {
+            System.err.println("Error semántico: variable \"" + nombre + "\" ya declarada.");
+        }
+        else{
+            Variable id = new Variable(nombre, tipo);
+            TablaSimbolos.getInstance().addIdentificador(id);
+        }
     }
 
 
@@ -168,7 +179,6 @@ public class Escucha extends comp24BaseListener{
      * - Generar warning por una variable usada sin inicialización
      * - Generar error por una variable usada sin declaración
      */
-
     @Override
     public void exitFactor(FactorContext ctx) {
         if (ctx.ID() != null) {
@@ -190,7 +200,7 @@ public class Escucha extends comp24BaseListener{
                 }
             }
             else {
-                System.err.println("Error semántico: variable \"" + nombre + "\" no declarada.");
+                System.err.println("Error semántico: variable \"" + nombre + "\" usada sin declaración.");
             }
         }
     }
