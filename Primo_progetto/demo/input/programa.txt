@@ -1,8 +1,13 @@
+void sum (int a1, int b1){
+    return a;
+}
+
 int fact (int n, int x, int y, char z, double j, int k){
     int a;
+
+    a = a + 1;
+
+    x = a;
+
+    return sum(a, x);
 } // definicion
-
-
-int abc(){
-    int b;
-}

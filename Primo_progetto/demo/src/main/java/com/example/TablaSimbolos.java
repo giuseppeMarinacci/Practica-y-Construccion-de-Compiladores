@@ -69,7 +69,7 @@ class Contexto {
     public void imprimirContexto(String absoluteFilePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(absoluteFilePath, true))) {
             // cabecera
-            writer.write("\n---------------- Contexto ----------------\n");
+            writer.write("\n-------------------- Contexto ---------------------\n");
             writer.write(String.format("%-15s%-10s%-10s%-16s", "NAME", "TYPE", "USED", "INITIALIZED"));
             writer.write("\n---------------------------------------------------\n");
             

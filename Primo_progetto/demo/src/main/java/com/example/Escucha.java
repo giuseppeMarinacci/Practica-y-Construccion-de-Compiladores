@@ -3,23 +3,27 @@ package com.example;
 import java.io.File;
 import java.util.LinkedList;
 
-//import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.ParserRuleContext;
 //import org.antlr.v4.runtime.tree.TerminalNode;
 
 import com.example.comp24Parser.BloqueContext;
 import com.example.comp24Parser.DeclaracionContext;
 import com.example.comp24Parser.ProgramaContext;
 import com.example.comp24Parser.Funcion_definicionContext;
+import com.example.comp24Parser.Func_llamadaContext;
+import com.example.comp24Parser.InstruccionesContext;
+import com.example.comp24Parser.ReturnContext;
 import com.example.comp24Parser.FactorContext;
 import com.example.comp24Parser.Lista_argumentosContext;
 
 public class Escucha extends comp24BaseListener{
     private TablaSimbolos tablaSimbolos = TablaSimbolos.getInstance();
     String absoluteFilePath = "C:\\Users\\Giuseppe\\Desktop\\Practica y Construccion de Compiladores\\Primo_progetto\\demo\\output\\tablaSimbolos.txt";    // path del archivo de texto donde se guardan la tabla de simbolos
+    // opcional: resolverlo con path relativo
 
     /*
      * tenemos que generar un archivo de texto donde imprimir 
-     * todas los contextos antes de borrarlos
+     * todos los contextos antes de borrarlos
      */
     
     // Borrar archivo
@@ -92,85 +96,60 @@ public class Escucha extends comp24BaseListener{
     
     @Override
     public void exitBloque(BloqueContext ctx) {
+        TipoDato tipo_funcion = null;
+        Boolean return_encontrado = false;
+        InstruccionesContext instrucciones = null;
+        ReturnContext return_instruccion = null;
         
-        /* 
-         * Se debe chequear si estamos en una funcion para chequear si el tipo del
-         * return coincide con el tipo de la declaracion de la funcion!
-         */
-        /*
         if (ctx.getParent() instanceof Funcion_definicionContext) {
-            Funcion funcion = (Funcion) tablaSimbolos.buscarGlobal(ctx.getParent().getChild(0).getChild(1).getText());
-            if (funcion.getTipoDato() != TipoDato.VOID) {
-                if (ctx.getChild(ctx.getChildCount() - 1) instanceof FactorContext) {
-                    FactorContext factor = (FactorContext) ctx.getChild(ctx.getChildCount() - 1);
-                    if (factor.ID() != null) {
-                        ID id = tablaSimbolos.buscarGlobal(factor.ID().getText());
-                        if (id != null) {
-                            if (id instanceof Variable) {
-                                if (((Variable) id).getTipoDato() != funcion.getTipoDato()) {
-                                    System.err.println("Error semántico: tipo de retorno de la función " + funcion.getNombre() + " no coincide con el tipo de la declaración.");
-                                }
-                            }
-                        }
+            tipo_funcion = TipoDato.fromString(ctx.getParent().getChild(0).getText());
+            //System.out.println("Analizando la función: " + tipo_funcion.toString());
+            
+            instrucciones = (InstruccionesContext) ctx.getChild(1);
+            //System.out.println("Instrucciones: " + instrucciones.getText() + " con child count: " + instrucciones.getChildCount());
+
+            if (instrucciones.getChildCount() != 0){ // este "for" busca si hay una instrucción "return"
+                while(instrucciones.getChildCount() != 0){
+                    //System.out.println("Instruccion: " + instrucciones.getChild(0).getText());
+                    if(instrucciones.getChild(0).getChild(0) instanceof ReturnContext){
+                        return_encontrado = true;
+                        return_instruccion = (ReturnContext) instrucciones.getChild(0).getChild(0);
+                        break;
                     }
+                    instrucciones = (InstruccionesContext) instrucciones.getChild(1);
                 }
-            } 
+            }
+            //System.out.println("Return encontrado: " + return_instruccion.getChild(0) + " " + return_instruccion.getChild(1));
+
+            if (tipo_funcion != TipoDato.VOID) {
+                //System.out.println("Funcion: " + tipo_funcion.toString() + " Tipo: " + TipoDato.VOID.toString());
+                if(!return_encontrado){
+                    System.err.println("Error semántico: función \"" + ctx.getParent().getChild(1).getText() + "\" no tiene return.");
+                }
+                else if (!correspondiente(return_instruccion, tipo_funcion)) {
+                    //System.out.println("La función " + ctx.getParent().getChild(1).getText() + " no tiene un return correspondiente.");
+                    System.err.println("Error semántico: tipo de retorno de la función \"" + ctx.getParent().getChild(1).getText() + "\" no coincide con el tipo de la declaración.");
+                }
+            }
+            else{
+                if (return_encontrado) {
+                    System.err.println("Error semántico: función \"" + ctx.getParent().getChild(1).getText() + "\" de tipo VOID no puede retornar un valor.");
+                }
+            }
         }
-        */
+        
         TablaSimbolos.getInstance().delContexto(absoluteFilePath);
     }
 
 
     @Override
     public void exitFuncion_definicion(Funcion_definicionContext ctx) {
-        /*
-        System.out.println("Analizando la funcion: " + ctx.getChild(1).getText());
-        LinkedList<Variable> args = new LinkedList<Variable>();
-        String nombre;
-        TipoDato tipo;
-
-        if (ctx.getChild(3).getChild(0) != null) { // si la función tiene el primero argumento
-            nombre = ctx.getChild(3).getChild(1).getText();
-            tipo = TipoDato.fromString(ctx.getChild(3).getChild(0).getText());
-            args.add(new Variable(nombre, tipo)); // se añade el primer argumento
-            // System.out.println("Primer argumento: " + ctx.getChild(3).getChild(0).getText() + " " + nombre);
-
-            if(ctx.getChild(4).getChildCount() > 0){ // si la función tiene el segundo argumento
-                Lista_argumentosContext lista_argumentos = (Lista_argumentosContext) ctx.getChild(4);
-                
-                nombre = lista_argumentos.getChild(1).getChild(1).getText();
-                tipo = TipoDato.fromString(lista_argumentos.getChild(1).getChild(0).getText());
-                args.add(new Variable(nombre, tipo)); // se añade el segundo argumento
-                // System.err.println("Segundo argumento: " + lista_argumentos.getChild(1).getChild(0).getText() + " " + nombre);
-
-                while(lista_argumentos.getChild(2).getChildCount() > 0){ // mientras la lista de argumentos tenga más de dos argumento
-                    lista_argumentos = (Lista_argumentosContext) lista_argumentos.getChild(2);
-                    
-                    nombre = lista_argumentos.getChild(1).getChild(1).getText();
-                    tipo = TipoDato.fromString(lista_argumentos.getChild(1).getChild(0).getText());
-                    args.add(new Variable(nombre, tipo)); // se añade el siguiente argumento
-                    // System.err.println("Argumento: " + lista_argumentos.getChild(1).getChild(0).getText() + " " + nombre);
-                }
-            }            
-        }
         
-        Funcion funcion = new Funcion(ctx.getChild(1).getText(), // nombre de la función
-                                    TipoDato.fromString(ctx.getChild(0).getText()), // tipo de la función
-                                    args // lista de argumentos
-                                    );
-        */
-
         TablaSimbolos.getInstance().addIdentificador(new Variable(ctx.getChild(1).getText(), TipoDato.fromString(ctx.getChild(0).getText())));
     }
 
     @Override
     public void exitDeclaracion(DeclaracionContext ctx) {
-        /*
-        System.out.println("Declaracion: getText() = " + ctx.getText());
-        System.out.println("Declaracion: getChild(0).getText() = " + ctx.getChild(0).getText());
-        System.out.println("Declaracion: getChild(1).getText() = " + ctx.getChild(1).getText());
-        */
-
         /* 
          * 1. Se debe chequear si la variable ya fue declarada en el contexto local
          * 2. Se debe chequear que el tipo de una variable no sea "VOID"
@@ -193,10 +172,51 @@ public class Escucha extends comp24BaseListener{
                 }
             }
             else {
-                System.err.println("Error semántico: variable " + nombre + " no declarada");
+                System.err.println("Error semántico: variable \"" + nombre + "\" no declarada");
             }
         }
     }
 
+    // Chequear que el tipo de retorno de una función sea correspondiente al tipo de la instrucción "return"
+    Boolean correspondiente(ParserRuleContext ctx, TipoDato tipo_funcion){
+        ctx = (ParserRuleContext) ctx.getChild(1);
+        
+        while(! (ctx instanceof FactorContext) ){
+            ctx = (ParserRuleContext) ctx.getChild(0);
+        }
+        FactorContext factor = (FactorContext) ctx; // factor es el nodo que contiene el valor que se retorna
+
+        // caso 1: factor es un número
+        if(factor.NUMERO() != null){
+            //System.out.println("Numero: " + factor.NUMERO().getText() + ", Tipo funcion: " + tipo_funcion.toString());
+            if(tipo_funcion != TipoDato.INT && tipo_funcion != TipoDato.DOUBLE){
+                return false;
+            }
+        }
+
+        // caso 2: factor es una variable
+        if(factor.ID() != null){
+            ID id = tablaSimbolos.buscarLocal(factor.ID().getText());
+            //System.out.println("ID: " + factor.ID().getText() + " tiene tipo: " + ((Variable) id).getTipoDato().toString() + ", Tipo funcion: " + tipo_funcion.toString());
+            if(id != null){
+                if(id instanceof Variable){
+                    if(((Variable) id).getTipoDato() != tipo_funcion){
+                        return false;
+                    }
+                }
+            }
+        }
+
+        // caso 3: factor es una llamada a función
+        if(factor.getChild(0) instanceof Func_llamadaContext){
+            ID funcion = (ID) tablaSimbolos.buscarGlobal(factor.getChild(0).getChild(0).getText());
+            //System.out.println("Funcion: " + factor.getChild(0).getChild(0).getText() + " tiene tipo: " + funcion.getTipoDato().toString() + ", Tipo funcion: " + tipo_funcion.toString());
+            if(funcion.getTipoDato() != tipo_funcion){
+                return false;
+            }
+        }
+
+        return true;
+    }
 	
 }
