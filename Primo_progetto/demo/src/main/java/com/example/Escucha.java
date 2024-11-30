@@ -151,6 +151,7 @@ public class Escucha extends comp24BaseListener{
         TablaSimbolos.getInstance().addIdentificador(new Variable(ctx.getChild(1).getText(), TipoDato.fromString(ctx.getChild(0).getText())));
     }
 
+
     @Override
     public void exitDeclaracion(DeclaracionContext ctx) {
         /* 
@@ -162,20 +163,34 @@ public class Escucha extends comp24BaseListener{
     }
 
 
-    
-    // Setear variable como inicializada
+    /* Funciones de exitFactor:
+     * - Marcar una variable como usada
+     * - Generar warning por una variable usada sin inicialización
+     * - Generar error por una variable usada sin declaración
+     */
+
     @Override
     public void exitFactor(FactorContext ctx) {
         if (ctx.ID() != null) {
             String nombre = ctx.ID().getText();
             ID id = tablaSimbolos.buscarGlobal(nombre);
             if (id != null) {
-                if (id instanceof Variable) {
-                    id.setInicializado();
+                if (id.getInicializado()) {
+                    id.setUsado();
+                }
+                else {
+                    id.setUsado();
+                    //System.out.println("Warning parent: variable " + (ctx.getParent().getParent().getParent().getParent().getParent().getParent().getParent().getParent() instanceof ReturnContext));
+                    if(ctx.getParent().getParent().getParent().getParent().getParent().getParent().getParent().getParent() instanceof ReturnContext){
+                        System.err.println("Warning: variable \"" + nombre + "\" retornada sin inicialización.");
+                    }
+                    else {
+                        System.err.println("Warning: variable \"" + nombre + "\" usada sin inicialización.");
+                    }    
                 }
             }
             else {
-                System.err.println("Error semántico: variable \"" + nombre + "\" no declarada");
+                System.err.println("Error semántico: variable \"" + nombre + "\" no declarada.");
             }
         }
     }
