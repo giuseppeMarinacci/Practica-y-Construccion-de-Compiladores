@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 
 import org.antlr.v4.runtime.ParserRuleContext;
-//import org.antlr.v4.runtime.tree.TerminalNode;
 
 import com.example.comp24Parser.AsignacionContext;
 import com.example.comp24Parser.BloqueContext;
@@ -22,9 +21,8 @@ import com.example.comp24Parser.Lista_argumentosContext;
 public class Escucha extends comp24BaseListener{
     private TablaSimbolos tablaSimbolos = TablaSimbolos.getInstance();
     String absoluteFilePath = "C:\\Users\\Giuseppe\\Desktop\\Practica y Construccion de Compiladores\\Primo_progetto\\demo\\output\\tablaSimbolos.txt";    // path del archivo de texto donde se guardan la tabla de simbolos
-    // opcional: resolverlo con path relativo
 
-    // Borrar archivo
+    // Borrar archivo de output para limpiar la tabla de simbolos antes de empezar a escuchar
     public void delFile(String filePath) {
         File file = new File(filePath);
         if (file.exists()) {
@@ -33,6 +31,10 @@ public class Escucha extends comp24BaseListener{
     }
 
 
+    /* Funciones de enterPrograma:
+     * - crear un nuevo (el primer) contexto en la tabla de símbolos
+     * - borrar el archivo de output para limpiar la tabla de símbolos
+     */
     @Override
     public void enterPrograma(ProgramaContext ctx) {
         delFile(absoluteFilePath);
@@ -43,12 +45,19 @@ public class Escucha extends comp24BaseListener{
     }
 
 
+    /* Funciones de exitPrograma:
+     * - borrar el primer contexto de la tabla de símbolos
+     */
     @Override
     public void exitPrograma(ProgramaContext ctx) {
         tablaSimbolos.delContexto(absoluteFilePath);
     }
 
 
+    /* Funciones de enterBloque:
+     * - crear un nuevo contexto en la tabla de símbolos
+     * - si el bloque es hijo de la definición de una función, se agrega el contexto de la función (si la función no es "main", se marcan los argumentos como inicializados para evitar warnings)
+     */
     @Override
     public void enterBloque(BloqueContext ctx) {
         TablaSimbolos.getInstance().addContexto();
@@ -90,14 +99,21 @@ public class Escucha extends comp24BaseListener{
             }
             else{
                 for(Variable arg : args) {
-                    arg.setInicializado(); // si la función no es "main", se marcan los argumentos como inicializados para evitar warnings
+                    arg.setInicializado(); // si la función no es "main", se marcan los argumentos como inicializados para evitar warnings inutiles
                     TablaSimbolos.getInstance().addIdentificador(arg);
                 }
             }
         }
     }
 
-    
+    /* Funciones de exitBloque:
+     * - chequear si hay variables declaradas pero no usadas
+     * - borrar el contexto actual de la tabla de símbolos
+     * - chequear si es el bloque de codigo de una función. Si sí:
+     *      - chequear si la función no es de tipo VOID y no tiene un "return"
+     *      - chequear si la función es de tipo VOID y tiene "return"
+     *      - chequear si el tipo de retorno coincide con el tipo de la declaración
+     */
     @Override
     public void exitBloque(BloqueContext ctx) {
         TipoDato tipo_funcion = null;
@@ -110,8 +126,8 @@ public class Escucha extends comp24BaseListener{
             
             instrucciones = (InstruccionesContext) ctx.getChild(1);
             
-            if (instrucciones.getChildCount() != 0){ // este "for" busca si hay una instrucción "return"
-                while(instrucciones.getChildCount() != 0){
+            if (instrucciones.getChildCount() != 0){ // si el bloque tiene instrucciones
+                while(instrucciones.getChildCount() != 0){ // este "while" busca si hay una instrucción "return" en el bloque
                     if(instrucciones.getChild(0).getChild(0) instanceof ReturnContext){
                         return_encontrado = true;
                         return_instruccion = (ReturnContext) instrucciones.getChild(0).getChild(0);
@@ -147,32 +163,40 @@ public class Escucha extends comp24BaseListener{
     }
 
 
+    /* Funciones de exitFuncion_definicion:
+     * - chequear si la función ya fue declarada en el contexto global
+     * - agregar la función a la tabla de símbolos
+     */
     @Override
     public void exitFuncion_definicion(Funcion_definicionContext ctx) {
         LinkedList<Variable> args = new LinkedList<Variable>();
         String nombre_funcion = ctx.getChild(1).getText();
         TipoDato tipo_funcion = TipoDato.fromString(ctx.getChild(0).getText());
         
-        if(ctx.getChild(3).getChildCount() > 0){
-            String nombre_argumento = ctx.getChild(3).getChild(1).getText();
-            TipoDato tipo_argumento = TipoDato.fromString(ctx.getChild(3).getChild(0).getText());
-            ParserRuleContext tmp = (ParserRuleContext) ctx.getChild(3);
+        if(tablaSimbolos.buscarGlobal(nombre_funcion) != null){
+            System.err.println("Error semántico: función \"" + nombre_funcion + "\" ya declarada.");
+        }
+        else {
+            if(ctx.getChild(3).getChildCount() > 0){ // este "if" busca si la función tiene argumentos y los agrega a la lista "args"
+                String nombre_argumento = ctx.getChild(3).getChild(1).getText();
+                TipoDato tipo_argumento = TipoDato.fromString(ctx.getChild(3).getChild(0).getText());
+                ParserRuleContext tmp = (ParserRuleContext) ctx.getChild(3);
 
-            args.add(new Variable(nombre_argumento, tipo_argumento));
+                args.add(new Variable(nombre_argumento, tipo_argumento));
 
-            if(ctx.getChild(4).getChildCount() > 0){
-                tmp = (ParserRuleContext) ctx.getChild(4);
-                while(tmp.getChildCount() > 0){
-                    nombre_argumento = tmp.getChild(1).getChild(1).getText();
-                    tipo_argumento = TipoDato.fromString(tmp.getChild(1).getChild(0).getText());
-                    args.add(new Variable(nombre_argumento, tipo_argumento));
-                    tmp = (ParserRuleContext) tmp.getChild(2);
+                if(ctx.getChild(4).getChildCount() > 0){
+                    tmp = (ParserRuleContext) ctx.getChild(4);
+                    while(tmp.getChildCount() > 0){
+                        nombre_argumento = tmp.getChild(1).getChild(1).getText();
+                        tipo_argumento = TipoDato.fromString(tmp.getChild(1).getChild(0).getText());
+                        args.add(new Variable(nombre_argumento, tipo_argumento));
+                        tmp = (ParserRuleContext) tmp.getChild(2);
+                    }
                 }
             }
-        }
 
-        //System.out.println("Funcion: " + nombre_funcion + ", Tipo: " + tipo_funcion.toString() + ", Args: " + args.toString());
-        TablaSimbolos.getInstance().addIdentificador(new Funcion(nombre_funcion, tipo_funcion, args));
+            TablaSimbolos.getInstance().addIdentificador(new Funcion(nombre_funcion, tipo_funcion, args));
+        }
     }
 
 
@@ -203,6 +227,12 @@ public class Escucha extends comp24BaseListener{
     }
 
 
+    /* Funciones de exitList_decl:
+     * - Chequear si cada variable ya fue declarada en el contexto local
+     * - Chequear que el tipo de una variable no sea VOID
+     * - Poner el flag "inicializado" = true si la declaración tiene inizialización
+     * - Agregar la variable a la tabla de símbolos
+     */
     @Override
     public void exitList_decl(List_declContext ctx) {
         if(ctx.getChildCount() > 0){  
@@ -252,6 +282,11 @@ public class Escucha extends comp24BaseListener{
     }
 
 
+    /* Funciones de exitFunc_llamada:
+     * - Chequear si la función llamada fue declarada en el contexto global
+     * - Chequear si la función fue llamada con el número correcto de argumentos
+     * - Chequear si los argumentos de la función llamada tienen el tipo correcto
+     */
     @Override
     public void exitFunc_llamada(Func_llamadaContext ctx) {
         String nombre_funcion = ctx.getChild(0).getText();
@@ -260,11 +295,11 @@ public class Escucha extends comp24BaseListener{
         if(tablaSimbolos.buscarGlobal(nombre_funcion) != null){
             ID funcion = tablaSimbolos.buscarGlobal(nombre_funcion);
             
-            if(funcion instanceof Funcion){
+            if(funcion instanceof Funcion){ // si la función llamada tiene argumentos, se agregan a la lista "args"
                 if(ctx.getChild(2).getChildCount() > 0){
                     
-                    String nombre_parametro; // = ctx.getChild(2).getChild(1).getText();
-                    TipoDato tipo_parametro; // = TipoDato.fromString(ctx.getChild(2).getChild(0).getText());
+                    String nombre_parametro;
+                    TipoDato tipo_parametro;
                     ParserRuleContext tmp = (ParserRuleContext) ctx.getChild(2);
 
                     while(! (tmp.getChild(0) instanceof FactorContext)){
@@ -349,7 +384,9 @@ public class Escucha extends comp24BaseListener{
     }
 
 
-    // Chequear que el tipo de retorno de una función sea correspondiente al tipo de la instrucción "return"
+    /* Funciones de correspondiente:
+     * - Chequear que el tipo de retorno de una función sea correspondiente al tipo de la variable retornada
+     */
     Boolean correspondiente(ParserRuleContext ctx, TipoDato tipo_funcion){
         ctx = (ParserRuleContext) ctx.getChild(1);
         
