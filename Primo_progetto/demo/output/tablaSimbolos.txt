@@ -1,16 +1,32 @@
 
 -------------------- Contexto ---------------------
-NAME           TYPE      USED      INITIALIZED     
+NOMBRE         TIPO      USADO     INICIALIZADO    
 ---------------------------------------------------
-a              INT       false     true              
-x              INT       false     false             
-y              INT       false     false             
-z              CHAR      false     false             
-j              DOUBLE    false     false             
-k              INT       false     false             
-n              INT       false     false             
+a1             INT       true      true              
+c              INT       true      true              
+b1             INT       true      true              
 
 -------------------- Contexto ---------------------
-NAME           TYPE      USED      INITIALIZED     
+NOMBRE         TIPO      USADO     INICIALIZADO    
+---------------------------------------------------
+a              INT       true      true              
+x              INT       true      true              
+y              INT       true      true              
+z              CHAR      false     true              
+j              DOUBLE    false     true              
+k              INT       false     true              
+n              INT       false     true              
+
+-------------------- Contexto ---------------------
+NOMBRE         TIPO      USADO     INICIALIZADO    
+---------------------------------------------------
+ciao           INT       true      true              
+hello          INT       false     false             
+hola           INT       true      true              
+
+-------------------- Contexto ---------------------
+NOMBRE         TIPO      USADO     INICIALIZADO    
 ---------------------------------------------------
 fact           INT       false     false             
+sum            INT       false     false             
+main           VOID      false     false             

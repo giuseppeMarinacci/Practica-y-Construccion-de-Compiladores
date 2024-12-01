@@ -7,12 +7,14 @@ import java.util.ArrayList;
 import org.antlr.v4.runtime.ParserRuleContext;
 //import org.antlr.v4.runtime.tree.TerminalNode;
 
+import com.example.comp24Parser.AsignacionContext;
 import com.example.comp24Parser.BloqueContext;
 import com.example.comp24Parser.DeclaracionContext;
 import com.example.comp24Parser.ProgramaContext;
 import com.example.comp24Parser.Funcion_definicionContext;
 import com.example.comp24Parser.Func_llamadaContext;
 import com.example.comp24Parser.InstruccionesContext;
+import com.example.comp24Parser.List_declContext;
 import com.example.comp24Parser.ReturnContext;
 import com.example.comp24Parser.FactorContext;
 import com.example.comp24Parser.Lista_argumentosContext;
@@ -35,7 +37,7 @@ public class Escucha extends comp24BaseListener{
     public void enterPrograma(ProgramaContext ctx) {
         delFile(absoluteFilePath);
 
-        System.out.println("Empezando a escuchar...");
+        System.out.println("Empezando a escuchar!");
 
         tablaSimbolos.addContexto();        
     }
@@ -77,13 +79,20 @@ public class Escucha extends comp24BaseListener{
                         tipo = TipoDato.fromString(lista_argumentos.getChild(1).getChild(0).getText());
                         args.add(new Variable(nombre, tipo)); // se añade el siguiente argumento
                     }
-
-
                 }            
             }
 
-            for(Variable arg : args) { // se añaden los argumentos al contexto
-                TablaSimbolos.getInstance().addIdentificador(arg);
+            // Se añaden los argumentos al contexto
+            if (ctx.getParent().getChild(1).getText() == "main"){
+                for(Variable arg : args) {
+                    TablaSimbolos.getInstance().addIdentificador(arg);
+                }
+            }
+            else{
+                for(Variable arg : args) {
+                    arg.setInicializado(); // si la función no es "main", se marcan los argumentos como inicializados
+                    TablaSimbolos.getInstance().addIdentificador(arg);
+                }
             }
         }
         
@@ -155,6 +164,8 @@ public class Escucha extends comp24BaseListener{
     /* Funciones de exitDeclaracion:
      * - Chequear si la variable ya fue declarada en el contexto local
      * - Chequear que el tipo de una variable no sea "VOID"
+     * - Poner el flag "inicializado" = true si la declaración tiene inizialización
+     * - Agregar la variable a la tabla de símbolos
      */
     @Override
     public void exitDeclaracion(DeclaracionContext ctx) {
@@ -169,8 +180,66 @@ public class Escucha extends comp24BaseListener{
         }
         else{
             Variable id = new Variable(nombre, tipo);
+            if (ctx.getChild(2).getChildCount() > 0) {
+                id.setInicializado();
+            }
             TablaSimbolos.getInstance().addIdentificador(id);
         }
+    }
+
+
+    @Override
+    public void exitList_decl(List_declContext ctx) {
+        if(ctx.getChildCount() > 0){  
+            String nombre = ctx.getChild(1).getText();
+            TipoDato tipo;
+            ParserRuleContext tmp = ctx;
+
+            while(! (tmp.getParent() instanceof DeclaracionContext)){
+                tmp = (List_declContext) tmp.getParent();
+            }
+            tmp = (DeclaracionContext) tmp.getParent();
+            tipo = TipoDato.fromString(tmp.getChild(0).getText());
+            
+
+            if(tipo == TipoDato.VOID){
+                System.err.println("Error semántico: variable \"" + nombre + "\" no puede ser de tipo VOID.");
+            }
+            else if (TablaSimbolos.getInstance().buscarLocal(nombre) != null) {
+                System.err.println("Error semántico: variable \"" + nombre + "\" ya declarada.");
+            }
+            else{
+                Variable id = new Variable(nombre, tipo);
+                if (ctx.getChild(2).getChildCount() > 0) {
+                    id.setInicializado();
+                }
+                TablaSimbolos.getInstance().addIdentificador(id);
+            }
+        }
+    }
+
+
+    /* Funciones de exitAsignacion:
+     * - Chequear si la variable a la izquierda del "=" ya fue declarada en el contexto local
+     * - Marcar una variable como inicializada
+     */
+    @Override
+    public void exitAsignacion(AsignacionContext ctx) {
+        String nombre = ctx.getChild(0).getText();
+        ID id = TablaSimbolos.getInstance().buscarLocal(nombre);
+        
+        if (id == null) {
+            System.err.println("Error semántico: variable \"" + nombre + "\" no declarada.");
+        }
+        else {
+            ((Variable) id).setInicializado();
+        }
+    }
+
+
+    @Override
+    public void exitFunc_llamada(Func_llamadaContext ctx) {
+        
     }
 
 
@@ -201,10 +270,10 @@ public class Escucha extends comp24BaseListener{
             }
             else {
                 System.err.println("Error semántico: variable \"" + nombre + "\" usada sin declaración.");
+                //throw new RuntimeException("Error semántico: variable \"" + nombre + "\" usada sin declaración.");
             }
         }
     }
-
 
 
     // Chequear que el tipo de retorno de una función sea correspondiente al tipo de la instrucción "return"

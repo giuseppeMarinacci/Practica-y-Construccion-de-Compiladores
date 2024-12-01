@@ -78,7 +78,7 @@ instruccion : bloque
             | if_instruccion
             | for
             | while
-            | opal
+            | opal PYC
             | exp
             | return
             ;
