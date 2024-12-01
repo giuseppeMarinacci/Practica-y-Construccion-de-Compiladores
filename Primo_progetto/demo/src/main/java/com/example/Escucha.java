@@ -90,12 +90,11 @@ public class Escucha extends comp24BaseListener{
             }
             else{
                 for(Variable arg : args) {
-                    arg.setInicializado(); // si la función no es "main", se marcan los argumentos como inicializados
+                    arg.setInicializado(); // si la función no es "main", se marcan los argumentos como inicializados para evitar warnings
                     TablaSimbolos.getInstance().addIdentificador(arg);
                 }
             }
         }
-        
     }
 
     
@@ -108,14 +107,11 @@ public class Escucha extends comp24BaseListener{
         
         if (ctx.getParent() instanceof Funcion_definicionContext) {
             tipo_funcion = TipoDato.fromString(ctx.getParent().getChild(0).getText());
-            //System.out.println("Analizando la función: " + tipo_funcion.toString());
             
             instrucciones = (InstruccionesContext) ctx.getChild(1);
-            //System.out.println("Instrucciones: " + instrucciones.getText() + " con child count: " + instrucciones.getChildCount());
-
+            
             if (instrucciones.getChildCount() != 0){ // este "for" busca si hay una instrucción "return"
                 while(instrucciones.getChildCount() != 0){
-                    //System.out.println("Instruccion: " + instrucciones.getChild(0).getText());
                     if(instrucciones.getChild(0).getChild(0) instanceof ReturnContext){
                         return_encontrado = true;
                         return_instruccion = (ReturnContext) instrucciones.getChild(0).getChild(0);
@@ -124,15 +120,12 @@ public class Escucha extends comp24BaseListener{
                     instrucciones = (InstruccionesContext) instrucciones.getChild(1);
                 }
             }
-            //System.out.println("Return encontrado: " + return_instruccion.getChild(0) + " " + return_instruccion.getChild(1));
-
+            
             if (tipo_funcion != TipoDato.VOID) {
-                //System.out.println("Funcion: " + tipo_funcion.toString() + " Tipo: " + TipoDato.VOID.toString());
                 if(!return_encontrado){
                     System.err.println("Error semántico: función \"" + ctx.getParent().getChild(1).getText() + "\" no tiene return.");
                 }
                 else if (!correspondiente(return_instruccion, tipo_funcion)) {
-                    //System.out.println("La función " + ctx.getParent().getChild(1).getText() + " no tiene un return correspondiente.");
                     System.err.println("Error semántico: tipo de retorno de la función \"" + ctx.getParent().getChild(1).getText() + "\" no coincide con el tipo de la declaración.");
                 }
             }
@@ -156,8 +149,30 @@ public class Escucha extends comp24BaseListener{
 
     @Override
     public void exitFuncion_definicion(Funcion_definicionContext ctx) {
+        LinkedList<Variable> args = new LinkedList<Variable>();
+        String nombre_funcion = ctx.getChild(1).getText();
+        TipoDato tipo_funcion = TipoDato.fromString(ctx.getChild(0).getText());
         
-        TablaSimbolos.getInstance().addIdentificador(new Variable(ctx.getChild(1).getText(), TipoDato.fromString(ctx.getChild(0).getText())));
+        if(ctx.getChild(3).getChildCount() > 0){
+            String nombre_argumento = ctx.getChild(3).getChild(1).getText();
+            TipoDato tipo_argumento = TipoDato.fromString(ctx.getChild(3).getChild(0).getText());
+            ParserRuleContext tmp = (ParserRuleContext) ctx.getChild(3);
+
+            args.add(new Variable(nombre_argumento, tipo_argumento));
+
+            if(ctx.getChild(4).getChildCount() > 0){
+                tmp = (ParserRuleContext) ctx.getChild(4);
+                while(tmp.getChildCount() > 0){
+                    nombre_argumento = tmp.getChild(1).getChild(1).getText();
+                    tipo_argumento = TipoDato.fromString(tmp.getChild(1).getChild(0).getText());
+                    args.add(new Variable(nombre_argumento, tipo_argumento));
+                    tmp = (ParserRuleContext) tmp.getChild(2);
+                }
+            }
+        }
+
+        //System.out.println("Funcion: " + nombre_funcion + ", Tipo: " + tipo_funcion.toString() + ", Args: " + args.toString());
+        TablaSimbolos.getInstance().addIdentificador(new Funcion(nombre_funcion, tipo_funcion, args));
     }
 
 
@@ -239,7 +254,66 @@ public class Escucha extends comp24BaseListener{
 
     @Override
     public void exitFunc_llamada(Func_llamadaContext ctx) {
-        
+        String nombre_funcion = ctx.getChild(0).getText();
+        LinkedList<Variable> args = new LinkedList<Variable>();
+
+        if(tablaSimbolos.buscarGlobal(nombre_funcion) != null){
+            ID funcion = tablaSimbolos.buscarGlobal(nombre_funcion);
+            
+            if(funcion instanceof Funcion){
+                if(ctx.getChild(2).getChildCount() > 0){
+                    
+                    String nombre_parametro; // = ctx.getChild(2).getChild(1).getText();
+                    TipoDato tipo_parametro; // = TipoDato.fromString(ctx.getChild(2).getChild(0).getText());
+                    ParserRuleContext tmp = (ParserRuleContext) ctx.getChild(2);
+
+                    while(! (tmp.getChild(0) instanceof FactorContext)){
+                        tmp = (ParserRuleContext) tmp.getChild(0);
+                    }
+                    tmp = (FactorContext) tmp.getChild(0);
+                    
+                    nombre_parametro = tmp.getChild(0).getText();
+                    tipo_parametro = tablaSimbolos.buscarLocal(nombre_parametro).getTipoDato();
+                    
+                    args.add(new Variable(nombre_parametro, tipo_parametro));
+
+                    if(ctx.getChild(3).getChildCount() > 0){
+                        
+                        tmp = (ParserRuleContext) ctx.getChild(3);
+                        
+                        while(tmp.getChildCount() > 0){
+                            ParserRuleContext tmp2 = (ParserRuleContext) tmp.getChild(1);
+                            
+                            while(! (tmp2.getChild(0) instanceof FactorContext)){
+                                tmp2 = (ParserRuleContext) tmp2.getChild(0);
+                            }
+                            tmp2 = (FactorContext) tmp2.getChild(0);
+
+                            nombre_parametro = tmp2.getChild(0).getText();
+                            tipo_parametro = tablaSimbolos.buscarLocal(nombre_parametro).getTipoDato();
+                            
+                            args.add(new Variable(nombre_parametro, tipo_parametro));
+                            
+                            tmp = (ParserRuleContext) tmp.getChild(2);
+                        }
+                    }
+                }
+
+                if(((Funcion) funcion).getArgs().size() != args.size()){
+                    System.err.println("Error semántico: función \"" + nombre_funcion + "\" llamada con número incorrecto de argumentos (se esperaban " + ((Funcion) funcion).getArgs().size() + ", se encontraron " + args.size() + ").");
+                }
+                else{
+                    for(int i = 0; i < args.size(); i++){
+                        if(((Funcion) funcion).getArgs().get(i).getTipoDato() != args.get(i).getTipoDato()){
+                            System.err.println("Error semántico: función \"" + nombre_funcion + "\" llamada con argumento de tipo incorrecto (se esperaba " + ((Funcion) funcion).getArgs().get(i).getTipoDato().toString() + ", se encontró " + args.get(i).getTipoDato().toString() + ").");
+                        }
+                    }
+                }
+            }
+        }
+        else{
+            System.err.println("Error semántico: función \"" + nombre_funcion + "\" no declarada.");
+        }
     }
 
 
@@ -259,7 +333,6 @@ public class Escucha extends comp24BaseListener{
                 }
                 else {
                     id.setUsado();
-                    //System.out.println("Warning parent: variable " + (ctx.getParent().getParent().getParent().getParent().getParent().getParent().getParent().getParent() instanceof ReturnContext));
                     if(ctx.getParent().getParent().getParent().getParent().getParent().getParent().getParent().getParent() instanceof ReturnContext){
                         System.err.println("Warning: variable \"" + nombre + "\" retornada sin inicialización.");
                     }
@@ -287,7 +360,6 @@ public class Escucha extends comp24BaseListener{
 
         // caso 1: factor es un número
         if(factor.NUMERO() != null){
-            //System.out.println("Numero: " + factor.NUMERO().getText() + ", Tipo funcion: " + tipo_funcion.toString());
             if(tipo_funcion != TipoDato.INT && tipo_funcion != TipoDato.DOUBLE){
                 return false;
             }
@@ -296,7 +368,6 @@ public class Escucha extends comp24BaseListener{
         // caso 2: factor es una variable
         if(factor.ID() != null){
             ID id = tablaSimbolos.buscarLocal(factor.ID().getText());
-            //System.out.println("ID: " + factor.ID().getText() + " tiene tipo: " + ((Variable) id).getTipoDato().toString() + ", Tipo funcion: " + tipo_funcion.toString());
             if(id != null){
                 if(id instanceof Variable){
                     if(((Variable) id).getTipoDato() != tipo_funcion){
@@ -309,7 +380,6 @@ public class Escucha extends comp24BaseListener{
         // caso 3: factor es una llamada a función
         if(factor.getChild(0) instanceof Func_llamadaContext){
             ID funcion = (ID) tablaSimbolos.buscarGlobal(factor.getChild(0).getChild(0).getText());
-            //System.out.println("Funcion: " + factor.getChild(0).getChild(0).getText() + " tiene tipo: " + funcion.getTipoDato().toString() + ", Tipo funcion: " + tipo_funcion.toString());
             if(funcion.getTipoDato() != tipo_funcion){
                 return false;
             }

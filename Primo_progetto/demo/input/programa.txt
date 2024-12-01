@@ -1,22 +1,22 @@
-int sum (int a1, int b1){
-    int c = a1 + b1; 
+int sum (int n, int b1){
+    int c = n + b1; 
     return c;
 }
 
 int fact (int n, int x, int y, char z, double j, int k){
     int a;
 
-    //a = a + 1;
+    a = a + 1;
 
-    //x = a + b;
+    x = a + b;
 
-    a = sum(x, y);
+    a = sum(n, x);
 
     return a;
 }
 
 void main(){
-    int ciao = 1, hola = 2, hello;
+    int ciao = 1, hola = 2, hello = 3;
 
     ciao = sum(ciao, hola);
 }
