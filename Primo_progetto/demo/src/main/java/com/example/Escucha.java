@@ -21,6 +21,7 @@ import com.example.comp24Parser.Lista_argumentosContext;
 public class Escucha extends comp24BaseListener{
     private TablaSimbolos tablaSimbolos = TablaSimbolos.getInstance();
     String absoluteFilePath = "C:\\Users\\Giuseppe\\Desktop\\Practica y Construccion de Compiladores\\Primo_progetto\\demo\\output\\tablaSimbolos.txt";    // path del archivo de texto donde se guardan la tabla de simbolos
+    String warnings = ""; // String donde se guardan los warnings
 
     // Borrar archivo de output para limpiar la tabla de simbolos antes de empezar a escuchar
     public void delFile(String filePath) {
@@ -41,7 +42,7 @@ public class Escucha extends comp24BaseListener{
 
         System.out.println("Empezando a escuchar!");
 
-        tablaSimbolos.addContexto();        
+        tablaSimbolos.addContexto();
     }
 
 
@@ -50,6 +51,15 @@ public class Escucha extends comp24BaseListener{
      */
     @Override
     public void exitPrograma(ProgramaContext ctx) {
+        System.out.println("Terminando de escuchar!");
+
+        if(warnings.length() > 0){
+            System.out.println(warnings);
+        }
+        else{
+            System.out.println("No hay warnings.");
+        }
+
         tablaSimbolos.delContexto(absoluteFilePath);
     }
 
@@ -139,15 +149,15 @@ public class Escucha extends comp24BaseListener{
             
             if (tipo_funcion != TipoDato.VOID) {
                 if(!return_encontrado){
-                    System.err.println("Error semántico: función \"" + ctx.getParent().getChild(1).getText() + "\" no tiene return.");
-                }
+                    throw new RuntimeException("Error semántico: función \"" + ctx.getParent().getChild(1).getText() + "\" no tiene return.");
+                    }
                 else if (!correspondiente(return_instruccion, tipo_funcion)) {
-                    System.err.println("Error semántico: tipo de retorno de la función \"" + ctx.getParent().getChild(1).getText() + "\" no coincide con el tipo de la declaración.");
+                    throw new RuntimeException("Error semántico: tipo de retorno de la función \"" + ctx.getParent().getChild(1).getText() + "\" no coincide con el tipo de la declaración.");
                 }
             }
             else{
                 if (return_encontrado) {
-                    System.err.println("Error semántico: función \"" + ctx.getParent().getChild(1).getText() + "\" de tipo VOID no puede retornar un valor.");
+                    throw new RuntimeException("Error semántico: función \"" + ctx.getParent().getChild(1).getText() + "\" de tipo VOID no puede retornar un valor.");
                 }
             }
         }
@@ -155,7 +165,7 @@ public class Escucha extends comp24BaseListener{
         ArrayList<ID> no_usadas = TablaSimbolos.getInstance().buscarNoUsados();
         if (no_usadas.size() > 0) {
             for (ID id : no_usadas) {
-                System.err.println("Warning: variable \"" + id.getNombre() + "\" declarada pero no usada.");
+                warnings += "Warning: variable \"" + id.getNombre() + "\" declarada pero no usada.\n";
             }
         }
         
@@ -174,7 +184,7 @@ public class Escucha extends comp24BaseListener{
         TipoDato tipo_funcion = TipoDato.fromString(ctx.getChild(0).getText());
         
         if(tablaSimbolos.buscarGlobal(nombre_funcion) != null){
-            System.err.println("Error semántico: función \"" + nombre_funcion + "\" ya declarada.");
+            throw new RuntimeException("Error semántico: función \"" + nombre_funcion + "\" ya declarada.");
         }
         else {
             if(ctx.getChild(3).getChildCount() > 0){ // este "if" busca si la función tiene argumentos y los agrega a la lista "args"
@@ -212,10 +222,10 @@ public class Escucha extends comp24BaseListener{
         TipoDato tipo = TipoDato.fromString(ctx.getChild(0).getText());
 
         if(tipo == TipoDato.VOID){
-            System.err.println("Error semántico: variable \"" + nombre + "\" no puede ser de tipo VOID.");
+            throw new RuntimeException("Error semántico: variable \"" + nombre + "\" no puede ser de tipo VOID.");
         }
         else if (TablaSimbolos.getInstance().buscarLocal(nombre) != null) {
-            System.err.println("Error semántico: variable \"" + nombre + "\" ya declarada.");
+            throw new RuntimeException("Error semántico: variable \"" + nombre + "\" ya declarada.");
         }
         else{
             Variable id = new Variable(nombre, tipo);
@@ -248,10 +258,10 @@ public class Escucha extends comp24BaseListener{
             
 
             if(tipo == TipoDato.VOID){
-                System.err.println("Error semántico: variable \"" + nombre + "\" no puede ser de tipo VOID.");
+                throw new RuntimeException("Error semántico: variable \"" + nombre + "\" no puede ser de tipo VOID.");
             }
             else if (TablaSimbolos.getInstance().buscarLocal(nombre) != null) {
-                System.err.println("Error semántico: variable \"" + nombre + "\" ya declarada.");
+                throw new RuntimeException("Error semántico: variable \"" + nombre + "\" ya declarada.");
             }
             else{
                 Variable id = new Variable(nombre, tipo);
@@ -274,7 +284,7 @@ public class Escucha extends comp24BaseListener{
         ID id = TablaSimbolos.getInstance().buscarLocal(nombre);
         
         if (id == null) {
-            System.err.println("Error semántico: variable \"" + nombre + "\" no declarada.");
+            throw new RuntimeException("Error semántico: variable \"" + nombre + "\" no declarada.");
         }
         else {
             ((Variable) id).setInicializado();
@@ -335,19 +345,19 @@ public class Escucha extends comp24BaseListener{
                 }
 
                 if(((Funcion) funcion).getArgs().size() != args.size()){
-                    System.err.println("Error semántico: función \"" + nombre_funcion + "\" llamada con número incorrecto de argumentos (se esperaban " + ((Funcion) funcion).getArgs().size() + ", se encontraron " + args.size() + ").");
+                    throw new RuntimeException("Error semántico: función \"" + nombre_funcion + "\" llamada con número incorrecto de argumentos (se esperaban " + ((Funcion) funcion).getArgs().size() + ", se encontraron " + args.size() + ").");
                 }
                 else{
                     for(int i = 0; i < args.size(); i++){
                         if(((Funcion) funcion).getArgs().get(i).getTipoDato() != args.get(i).getTipoDato()){
-                            System.err.println("Error semántico: función \"" + nombre_funcion + "\" llamada con argumento de tipo incorrecto (se esperaba " + ((Funcion) funcion).getArgs().get(i).getTipoDato().toString() + ", se encontró " + args.get(i).getTipoDato().toString() + ").");
+                            throw new RuntimeException("Error semántico: función \"" + nombre_funcion + "\" llamada con argumento de tipo incorrecto (se esperaba " + ((Funcion) funcion).getArgs().get(i).getTipoDato().toString() + ", se encontró " + args.get(i).getTipoDato().toString() + ").");
                         }
                     }
                 }
             }
         }
         else{
-            System.err.println("Error semántico: función \"" + nombre_funcion + "\" no declarada.");
+            throw new RuntimeException("Error semántico: función \"" + nombre_funcion + "\" no declarada.");
         }
     }
 
@@ -369,16 +379,15 @@ public class Escucha extends comp24BaseListener{
                 else {
                     id.setUsado();
                     if(ctx.getParent().getParent().getParent().getParent().getParent().getParent().getParent().getParent() instanceof ReturnContext){
-                        System.err.println("Warning: variable \"" + nombre + "\" retornada sin inicialización.");
+                        warnings += "Warning: variable \"" + nombre + "\" retornada sin inicialización.\n";
                     }
                     else {
-                        System.err.println("Warning: variable \"" + nombre + "\" usada sin inicialización.");
+                        warnings += "Warning: variable \"" + nombre + "\" usada sin inicialización.\n";
                     }    
                 }
             }
             else {
-                System.err.println("Error semántico: variable \"" + nombre + "\" usada sin declaración.");
-                //throw new RuntimeException("Error semántico: variable \"" + nombre + "\" usada sin declaración.");
+                throw new RuntimeException("Error semántico: variable \"" + nombre + "\" usada sin declaración.");
             }
         }
     }

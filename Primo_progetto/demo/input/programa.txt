@@ -8,7 +8,7 @@ int fact (int n, int x, int y, char z, double j, int k){
 
     a = a + 1;
 
-    x = a + b;
+    x = a;
 
     a = sum(n, x);
 
