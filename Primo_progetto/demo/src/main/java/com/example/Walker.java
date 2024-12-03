@@ -15,10 +15,13 @@ import com.example.comp24Parser.TermContext;
 import com.example.comp24Parser.WhileContext;
 import com.example.comp24Parser.FactorContext;
 import com.example.comp24Parser.ForContext;
+import com.example.comp24Parser.Func_llamadaContext;
 import com.example.comp24Parser.Funcion_definicionContext;
 import com.example.comp24Parser.If_instruccionContext;
 import com.example.comp24Parser.List_declContext;
 import com.example.comp24Parser.Lista_argumentosContext;
+import com.example.comp24Parser.Lista_parametrosContext;
+import com.example.comp24Parser.ParametroContext;
 import com.example.comp24Parser.ProgramaContext;
 import com.example.comp24Parser.ReturnContext;
 import com.example.comp24Parser.TContext;
@@ -108,9 +111,16 @@ public class Walker extends com.example.comp24BaseVisitor<String> {
     @Override
     public String visitAsignacion(AsignacionContext ctx) {
         String id = ctx.ID().getText();
-        String value = visit(ctx.opal().or_expr().and_expr().not_expr().comp().exp());
+        String value = "";
         
-        tacCode.add(id + " = " + value);
+        if(ctx.opal().or_expr().and_expr().not_expr().comp().exp().term().factor().func_llamada() != null){
+            value = visit(ctx.opal().or_expr().and_expr().not_expr().comp().exp().term().factor().func_llamada());
+            tacCode.add("pop "+ id);
+        }
+        else{
+            value = visit(ctx.opal().or_expr().and_expr().not_expr().comp().exp());
+            tacCode.add(id + " = " + value);
+        }
         
         /*
         imprimirTAC(absoluteFilePath, s);        
@@ -227,6 +237,10 @@ public class Walker extends com.example.comp24BaseVisitor<String> {
             tacCode.add(factor + " = - " + operando);
         }
 
+        if (ctx.func_llamada() != null) { // Si el factor es una llamada a una función
+            factor = visit(ctx.func_llamada());
+        }
+
         return factor;
     }
 
@@ -313,8 +327,6 @@ public class Walker extends com.example.comp24BaseVisitor<String> {
         }
         */
 
-        //imprimirTAC(absoluteFilePath, tacCode);
-
         return null;
     }
 
@@ -351,8 +363,12 @@ public class Walker extends com.example.comp24BaseVisitor<String> {
         String id = ctx.ID().getText().toUpperCase();
         tacCode.add(id + ":");
 
-        String return_label = nuevoTmp();
-        tacCode.add("pop " + return_label);
+        String return_label = "";
+        // PUSH de la dirección de retorno
+        if(!id.equals("MAIN")){
+            return_label = nuevoTmp();
+            tacCode.add("pop " + return_label);
+        }
 
         ArrayList<String> argumentos = new ArrayList<>();
         
@@ -376,14 +392,16 @@ public class Walker extends com.example.comp24BaseVisitor<String> {
 
 
         // jump a la variable que contiene la dirección de retorno
-        tacCode.add("jmp " + return_label);
-
+        if(!id.equals("MAIN")){
+            tacCode.add("jmp " + return_label);
+        }
         /*
         for(String s : tacCode){
             System.out.println(s);
         }
         */
         imprimirTAC(absoluteFilePath, tacCode);
+        tacCode.clear();
         variable_retornada = "";
         return null;
     }
@@ -407,9 +425,55 @@ public class Walker extends com.example.comp24BaseVisitor<String> {
         variable_retornada = visit(ctx.opal().or_expr().and_expr().not_expr().comp().exp());
         return variable_retornada;
     }
-    
 
-    
+    @Override
+    public String visitFunc_llamada(Func_llamadaContext ctx) {
+        String id = ctx.ID().getText().toUpperCase();
 
+        ArrayList<String> parametros = new ArrayList<>();
+
+        // PUSH de los argumentos
+        if(ctx.parametro().getChildCount() != 0){
+            parametros.add(visit(ctx.parametro()));
+        }
+        if(ctx.lista_parametros().getChildCount() != 0){
+            String[] parametros_to_split = visit(ctx.lista_parametros()).split(",");
+            parametros.addAll(parametros.size(), List.of(parametros_to_split));
+        }
+        for(String s : parametros){
+            tacCode.add("push " + s);
+        }
+
+        String return_label = nuevaEtq();
+        // PUSH de la dirección de retorno
+        tacCode.add("push " + return_label);
+
+        // jump a la función
+        tacCode.add("jmp " + id);
+
+        // Etiqueta de retorno
+        tacCode.add(return_label + ":");
+
+        for(String s : tacCode){
+            System.out.println(s);
+        }
+        // POP de la variable de retorno (se hace en visitAsignacion)
+
+        return null;
+    }
+
+    @Override
+    public String visitLista_parametros(Lista_parametrosContext ctx) {
+        if(ctx.lista_parametros().getChildCount() != 0){
+            return visit(ctx.parametro()) + "," + visit(ctx.lista_parametros());
+        }
+        return visit(ctx.parametro());
+    }
+
+    @Override
+    public String visitParametro(ParametroContext ctx) {
+        return visit(ctx.opal().or_expr().and_expr().not_expr().comp().exp());
+    }
     
+   
 }

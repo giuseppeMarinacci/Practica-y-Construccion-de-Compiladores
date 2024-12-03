@@ -2,31 +2,22 @@
 -------------------- Contexto ---------------------
 NOMBRE         TIPO      USADO     INICIALIZADO    
 ---------------------------------------------------
-c              INT       true      true              
-n              INT       true      true              
-b1             INT       true      true              
+j              INT       true      true              
 
 -------------------- Contexto ---------------------
 NOMBRE         TIPO      USADO     INICIALIZADO    
 ---------------------------------------------------
 a              INT       true      true              
-x              INT       true      true              
-y              INT       false     true              
-z              CHAR      false     true              
-j              DOUBLE    false     true              
-k              INT       false     true              
-n              INT       true      true              
+b              INT       true      true              
 
 -------------------- Contexto ---------------------
 NOMBRE         TIPO      USADO     INICIALIZADO    
 ---------------------------------------------------
-ciao           INT       true      true              
-hello          INT       false     true              
-hola           INT       true      true              
+y              INT       true      true              
 
 -------------------- Contexto ---------------------
 NOMBRE         TIPO      USADO     INICIALIZADO    
 ---------------------------------------------------
-fact           INT       false     false             
-sum            INT       false     false             
-main           VOID      false     false             
+suma           INT       false     false             
+ciao           INT       false     false             
+main           INT       false     false             

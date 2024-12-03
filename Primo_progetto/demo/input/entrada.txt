@@ -257,17 +257,17 @@ while (i <= 10){
 int main(){
 	int y;
 
-	y = suma(x, 5); //linea 04
+	y = suma(y, 5); //linea 04
 
 	return 0;
 }
 
 
 // tradución linea 04:
-// push x           GENERAR PUSH DEL PRIMER ARGUMENTO
+// push y           GENERAR PUSH DEL PRIMER ARGUMENTO
 // push 5           GENERAR PUSH DEL SEGUNDO ARGUMENTO
 // push L0          GENERAR PUSH DE LA LABEL DE VUELTA
-// jmp suma         GENERAR JUMP + NOMBRE_FUNCION
+// jmp SUMA         GENERAR JUMP + NOMBRE_FUNCION
 // L0:              GENERAR LA LABEL DE VUELTA
 // pop y            GENERAR POP Y ASIGNACION DE LA VARIABLE RETURNADA
 

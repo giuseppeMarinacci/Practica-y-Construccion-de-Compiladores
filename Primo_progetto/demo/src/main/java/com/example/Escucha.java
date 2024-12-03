@@ -338,8 +338,14 @@ public class Escucha extends comp24BaseListener{
                     }
                     tmp = (FactorContext) tmp.getChild(0);
                     
-                    nombre_parametro = tmp.getChild(0).getText();
-                    tipo_parametro = tablaSimbolos.buscarLocal(nombre_parametro).getTipoDato();
+                    if(tmp.getChild(0) instanceof ID){
+                        nombre_parametro = tmp.getChild(0).getText();
+                        tipo_parametro = tablaSimbolos.buscarLocal(nombre_parametro).getTipoDato();
+                    }
+                    else{
+                        nombre_parametro = tmp.getChild(0).getText();
+                        tipo_parametro = TipoDato.INT;
+                    }
                     
                     args.add(new Variable(nombre_parametro, tipo_parametro));
 
@@ -355,8 +361,14 @@ public class Escucha extends comp24BaseListener{
                             }
                             tmp2 = (FactorContext) tmp2.getChild(0);
 
-                            nombre_parametro = tmp2.getChild(0).getText();
-                            tipo_parametro = tablaSimbolos.buscarLocal(nombre_parametro).getTipoDato();
+                            if(tmp.getChild(0) instanceof ID){
+                                nombre_parametro = tmp.getChild(0).getText();
+                                tipo_parametro = tablaSimbolos.buscarLocal(nombre_parametro).getTipoDato();
+                            }
+                            else{
+                                nombre_parametro = tmp.getChild(0).getText();
+                                tipo_parametro = TipoDato.INT;
+                            }
                             
                             args.add(new Variable(nombre_parametro, tipo_parametro));
                             
