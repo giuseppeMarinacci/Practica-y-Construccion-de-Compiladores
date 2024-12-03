@@ -1,6 +1,6 @@
 package com.example;
 
-//import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -8,7 +8,6 @@ import org.antlr.v4.runtime.CommonTokenStream;
 // Las diferentes entradas se explicaran oportunamente
 public class App {
     public static void main(String[] args) throws Exception {
-        System.out.println("Hello, Compilador!");
         // create a CharStream that reads from file
         // CharStream input = CharStreams.fromFileName("Primo_progetto/demo/input/entrada.txt");
         CharStream input = CharStreams.fromFileName("Primo_progetto/demo/input/programa.txt");
@@ -30,14 +29,18 @@ public class App {
 
         // Solicito al parser que comience indicando una regla gramatical
         // En este caso la regla es el simbolo inicial
-        // parser.s();
-        parser.programa();
-        //// ParseTree tree =  parser.programa();
+        //// parser.programa();
+        ParseTree tree = parser.programa();
+        if(tree == null) {
+            System.out.println("Error en el arbol");
+            return;
+        }
         // Conectamos el visitor
-        //// Walker visitor = new Walker();
-        //// visitor.visit(tree);
+        Walker visitor = new Walker();
+        visitor.visit(tree);
         // System.out.println(visitor);
         // System.out.println(visitor.getErrorNodes());
+        
         // Imprime el arbol obtenido
         // System.out.println(tree.toStringTree(parser));
         // System.out.println(escucha);

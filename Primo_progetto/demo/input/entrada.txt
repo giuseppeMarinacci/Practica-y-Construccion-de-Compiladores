@@ -141,25 +141,12 @@ void main(){
 
 
 
+/******************************/
 
+PARA EL VISITOR
 
-/*     CASI IRRISOLTI     */
+int a = 1, b = 1, c = 1, d = 1, e = 1;
 
-int x, hola(int i, char j){}, y = 0;  // il mio codice non lo prevede perchè secondo me non ha senso
+a = (e + 1) / ( - b * --c - 4 - d++ + 1);
 
-a = b = 0 = c; // per via dell'ordine, assegnare una variabile ad un numero non riesco a farlo (e forse non ha senso, controllare!)
-
-for ( a = 0, a + 2, b = 1, i++, x + y, d = a + b + c, 2;   
-a, 2, a++, c = d - a, d = d % 12;  
-++i, ++d, c = c % b)
-/* IN PRATICA: in ciascuna parte del for possono andare numeri,
-lettere, operatori unari, opal, exp, di tuttooooooooo.
-Non lo implemento perchè troppo complesso
-*/
-
-/* Ultimo problema: questi casi non dovrebbe compilare, invece 
- secondo il mio compilatore sono corretti, cioè compilano.
- Sono errati perchè non si possono avere una dichiarazione con
- <data_type> a = 7 seguita da una assegnazione.
-*/
-int a = 7, a = b = c, b ++, b += a, b = a + 2; // primi due ok, altri no (devono far fallire il compilatore)
+b = c + d + 1;

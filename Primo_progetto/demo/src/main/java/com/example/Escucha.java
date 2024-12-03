@@ -40,7 +40,8 @@ public class Escucha extends comp24BaseListener{
     public void enterPrograma(ProgramaContext ctx) {
         delFile(absoluteFilePath);
 
-        System.out.println("Empezando a escuchar!");
+        System.out.println("\n--------------------------------------------------\n");
+        System.out.println("Empezando a escuchar!\n");
 
         tablaSimbolos.addContexto();
     }
@@ -51,16 +52,18 @@ public class Escucha extends comp24BaseListener{
      */
     @Override
     public void exitPrograma(ProgramaContext ctx) {
-        System.out.println("Terminando de escuchar!");
 
         if(warnings.length() > 0){
             System.out.println(warnings);
         }
         else{
-            System.out.println("No hay warnings.");
+            System.out.println("No hay warnings.\n");
         }
 
         tablaSimbolos.delContexto(absoluteFilePath);
+
+        System.out.println("Terminando de escuchar!");
+        System.out.println("\n--------------------------------------------------\n");
     }
 
 
