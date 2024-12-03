@@ -63,6 +63,10 @@ public class TablaSimbolos {
             }
         return no_utilizados;
     }
+
+    public ArrayList<ID> buscarIDsPadre(){
+        return contextos.get(contextos.size() - 2).getSimbolos();
+    }
 }
 
 class Contexto {

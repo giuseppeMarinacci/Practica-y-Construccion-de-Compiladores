@@ -9,13 +9,17 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import com.example.comp24Parser.AsignacionContext;
 import com.example.comp24Parser.BloqueContext;
 import com.example.comp24Parser.DeclaracionContext;
+import com.example.comp24Parser.Else_instruccionContext;
 import com.example.comp24Parser.ProgramaContext;
 import com.example.comp24Parser.Funcion_definicionContext;
+import com.example.comp24Parser.If_instruccionContext;
 import com.example.comp24Parser.Func_llamadaContext;
 import com.example.comp24Parser.InstruccionesContext;
 import com.example.comp24Parser.List_declContext;
 import com.example.comp24Parser.ReturnContext;
+import com.example.comp24Parser.WhileContext;
 import com.example.comp24Parser.FactorContext;
+import com.example.comp24Parser.ForContext;
 import com.example.comp24Parser.Lista_argumentosContext;
 
 public class Escucha extends comp24BaseListener{
@@ -70,6 +74,7 @@ public class Escucha extends comp24BaseListener{
     /* Funciones de enterBloque:
      * - crear un nuevo contexto en la tabla de símbolos
      * - si el bloque es hijo de la definición de una función, se agrega el contexto de la función (si la función no es "main", se marcan los argumentos como inicializados para evitar warnings)
+     * - si el bloque es hijo de un "if", "else", "for" o "while", se agregan las variables declaradas en el bloque padre al contexto del bloque actual
      */
     @Override
     public void enterBloque(BloqueContext ctx) {
@@ -117,7 +122,20 @@ public class Escucha extends comp24BaseListener{
                 }
             }
         }
+
+        // si el bloque es hijo de un "if", "else", "for" o "while", se agregan las variables declaradas en el bloque padre al contexto del bloque actual
+        if (ctx.getParent().getParent() instanceof If_instruccionContext ||
+            ctx.getParent().getParent() instanceof Else_instruccionContext ||
+            ctx.getParent().getParent() instanceof ForContext ||
+            ctx.getParent().getParent() instanceof WhileContext) {
+            ArrayList<ID> to_add = TablaSimbolos.getInstance().buscarIDsPadre();
+            
+            for (ID id : to_add) {
+                TablaSimbolos.getInstance().addIdentificador(id);
+            }
+        }
     }
+
 
     /* Funciones de exitBloque:
      * - chequear si hay variables declaradas pero no usadas
