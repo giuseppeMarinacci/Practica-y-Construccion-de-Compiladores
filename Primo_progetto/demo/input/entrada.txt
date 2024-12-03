@@ -174,7 +174,8 @@ void main(){
 
 PARA EL VISITOR
 
-**** ASIGNACION ****
+/*     ASIGNACION     */
+
 int a = 1, b = 1, c = 1, d = 1, e = 1;
 
 a = (e + 1) / ( - b * --c - 4 - d++ + 1);
@@ -182,7 +183,9 @@ a = (e + 1) / ( - b * --c - 4 - d++ + 1);
 b = c + d + 1;
 
 
-**** IF - ELSE ****
+
+/*     IF - ELSE     */
+
 int x, y;
 
 if(x >= 0){
@@ -203,3 +206,46 @@ else
 // t2 = - x         ---
 // y = t2           ---
 // L1:              GENERAR LABEL
+
+
+
+/*     FOR     */
+int i, x, y;
+
+for (i = 0; i < 10; i++){
+	y = x;
+    x = x + y;
+    }
+
+// i = 0            GENERAR ACCION INICIAL
+// L0:              GENERAR LABEL DE PRINCIPIO
+// t0 = i < 10      GENERAR ACCION SIEMPRE
+// ifjmp t0, L1     GENERAR JUMP DE SALIDA
+// y = x            ---
+// t1 = x + y       ---
+// x = t1           ---
+// i = i + 1        GENERAR ACCION POST
+// jmp L0           GENERAR JUMP DE PRINCIPIO
+// L1:              GENERAR LABEL SALIDA
+
+
+
+/*     WHILE     */
+int i = 0, x, y;
+
+while (i <= 10){
+    y = x;
+    x = x + y;
+    i ++;
+}
+
+// i = 0            ---
+// L0:              GENERAR LABEL DE PRINCIPIO
+// t0 = i <= 10     GENERAR COMPARACION
+// ifjmp t0, L1     GENERAR JUMP DE SALIDA
+// y = x            ---
+// t1 = x + y       ---
+// x = t1           ---
+// i = i + 1        ---
+// jmp L0           GENERAR JUMP DE PRINCIPIO
+// L1:              GENERAR LABEL SALIDA

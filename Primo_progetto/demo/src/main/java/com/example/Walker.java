@@ -7,13 +7,17 @@ import java.util.List;
 import com.example.comp24Parser.AsignacionContext;
 import com.example.comp24Parser.CoContext;
 import com.example.comp24Parser.CompContext;
+import com.example.comp24Parser.DeclaracionContext;
 import com.example.comp24Parser.EContext;
 import com.example.comp24Parser.Else_instruccionContext;
 import com.example.comp24Parser.ExpContext;
 import com.example.comp24Parser.TermContext;
+import com.example.comp24Parser.WhileContext;
 import com.example.comp24Parser.FactorContext;
+import com.example.comp24Parser.ForContext;
 import com.example.comp24Parser.Funcion_definicionContext;
 import com.example.comp24Parser.If_instruccionContext;
+import com.example.comp24Parser.List_declContext;
 import com.example.comp24Parser.ProgramaContext;
 import com.example.comp24Parser.TContext;
 
@@ -66,6 +70,36 @@ public class Walker extends com.example.comp24BaseVisitor<String> {
 
 
     @Override
+    public String visitDeclaracion(DeclaracionContext ctx) {
+        String id = ctx.ID().getText();
+        String value = visit(ctx.inicializacion().opal().or_expr().and_expr().not_expr().comp().exp());
+        
+        tacCode.add(id + " = " + value);
+
+        if(ctx.list_decl().getChildCount() != 0){
+            visit(ctx.list_decl());
+        }
+        
+        return null;
+    }
+
+
+    @Override
+    public String visitList_decl(List_declContext ctx) {
+        String id = ctx.ID().getText();
+        String value = visit(ctx.inicializacion().opal().or_expr().and_expr().not_expr().comp().exp());
+        
+        tacCode.add(id + " = " + value);
+
+        if(ctx.list_decl().getChildCount() != 0){
+            visit(ctx.list_decl());
+        }
+        
+        return null;
+    }
+
+
+    @Override
     public String visitAsignacion(AsignacionContext ctx) {
         String id = ctx.ID().getText();
         String value = visit(ctx.opal().or_expr().and_expr().not_expr().comp().exp());
@@ -73,10 +107,7 @@ public class Walker extends com.example.comp24BaseVisitor<String> {
         tacCode.add(id + " = " + value);
         
         /*
-        for(String s : tacCode) {
-            imprimirTAC(absoluteFilePath, s);        
-        }
-        
+        imprimirTAC(absoluteFilePath, s);        
 
         tacCode.clear();
         */
@@ -175,7 +206,7 @@ public class Walker extends com.example.comp24BaseVisitor<String> {
         if (ctx.OPERADOR_UNARIO() != null) { // Si el factor es una operción con operador unario
             String operador = ctx.OPERADOR_UNARIO().toString();
             String operando = ctx.ID().getText();
-            factor = nuevoTmp();
+            factor = operando; // factor = nuevoTmp();
             
             if(operador.equals("++")) {
                 tacCode.add(factor + " = " + operando + " + 1");
@@ -212,9 +243,6 @@ public class Walker extends com.example.comp24BaseVisitor<String> {
         tacCode.add(etq2 + ":");
 
         /*
-        for(String s : tacCode) {
-            System.out.println(s);        
-        }
         imprimirTAC(absoluteFilePath, tacCode);
         */
 
@@ -255,12 +283,68 @@ public class Walker extends com.example.comp24BaseVisitor<String> {
 
 
     @Override
-    public String visitFuncion_definicion(Funcion_definicionContext ctx) {
-        imprimirTAC(absoluteFilePath, tacCode);
+    public String visitFor(ForContext ctx) {
+        visit(ctx.accion_inicial());
+
+        String etq_principio = nuevaEtq();
+        tacCode.add(etq_principio + ":");
+
+        String accion_siempre = visit(ctx.accion_siempre().opal().or_expr().and_expr().not_expr().comp());
+
+        String etq_salida = nuevaEtq();
+        tacCode.add("ifjmp " + accion_siempre + ", " + etq_salida);
+
+        visit(ctx.instruccion());
+
+        visit(ctx.accion_post());
+
+        tacCode.add("jmp " + etq_principio);
+        tacCode.add(etq_salida + ":");
+
+        /*
+        for(String s : tacCode){
+            System.out.println(s);
+        }
+        */
+
+        //imprimirTAC(absoluteFilePath, tacCode);
+
         return null;
     }
 
 
-    
+    @Override
+    public String visitWhile(WhileContext ctx) {
+        String etq_principio = nuevaEtq();
+        tacCode.add(etq_principio + ":");
+
+        String comparacion = visit(ctx.opal().or_expr().and_expr().not_expr().comp());
+
+        String etq_salida = nuevaEtq();
+        tacCode.add("ifjmp " + comparacion + ", " + etq_salida);
+
+        visit(ctx.instruccion());
+
+        tacCode.add("jmp " + etq_principio);
+        tacCode.add(etq_salida + ":");
+
+        /*
+        for(String s : tacCode){
+            System.out.println(s);
+        }
+        */
+        
+        //imprimirTAC(absoluteFilePath, tacCode);
+
+        return null;
+    }
+
+
+    @Override
+    public String visitFuncion_definicion(Funcion_definicionContext ctx) {
+        //imprimirTAC(absoluteFilePath, tacCode);
+        return null;
+    }
+
     
 }
