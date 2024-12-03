@@ -3,7 +3,7 @@ package com.example;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
+import com.example.comp24Parser.ArgumentoContext;
 import com.example.comp24Parser.AsignacionContext;
 import com.example.comp24Parser.CoContext;
 import com.example.comp24Parser.CompContext;
@@ -18,7 +18,9 @@ import com.example.comp24Parser.ForContext;
 import com.example.comp24Parser.Funcion_definicionContext;
 import com.example.comp24Parser.If_instruccionContext;
 import com.example.comp24Parser.List_declContext;
+import com.example.comp24Parser.Lista_argumentosContext;
 import com.example.comp24Parser.ProgramaContext;
+import com.example.comp24Parser.ReturnContext;
 import com.example.comp24Parser.TContext;
 
 public class Walker extends com.example.comp24BaseVisitor<String> {
@@ -26,7 +28,8 @@ public class Walker extends com.example.comp24BaseVisitor<String> {
     private int contador_tmp = 0, contador_etq = 0; // Contador para los registros temporales
     private List<String> tacCode = new ArrayList<>(); // Lista para memorizar el Código de Tres Direcciones (TAC)
     String absoluteFilePath = "C:\\Users\\Giuseppe\\Desktop\\Practica y Construccion de Compiladores\\Primo_progetto\\demo\\output\\TAC.txt"; // path del archivo de texto donde se guarda el Código de Tres Direcciones (TAC)
-    
+    String variable_retornada = ""; // Variables de retorno de las funciones
+
     // Borrar archivo de output para limpiar el Código de Tres Direcciones antes de empezar a visitar
     public void delFile(String filePath) {
         File file = new File(filePath);
@@ -71,28 +74,31 @@ public class Walker extends com.example.comp24BaseVisitor<String> {
 
     @Override
     public String visitDeclaracion(DeclaracionContext ctx) {
-        String id = ctx.ID().getText();
-        String value = visit(ctx.inicializacion().opal().or_expr().and_expr().not_expr().comp().exp());
-        
-        tacCode.add(id + " = " + value);
+        if(ctx.inicializacion().getChildCount() != 0){
+            String id = ctx.ID().getText();
+            String value = visit(ctx.inicializacion().opal().or_expr().and_expr().not_expr().comp().exp());
+            
+            tacCode.add(id + " = " + value);
 
-        if(ctx.list_decl().getChildCount() != 0){
-            visit(ctx.list_decl());
+            if(ctx.list_decl().getChildCount() != 0){
+                visit(ctx.list_decl());
+            }
         }
-        
         return null;
     }
 
 
     @Override
     public String visitList_decl(List_declContext ctx) {
-        String id = ctx.ID().getText();
-        String value = visit(ctx.inicializacion().opal().or_expr().and_expr().not_expr().comp().exp());
-        
-        tacCode.add(id + " = " + value);
+        if(ctx.inicializacion().getChildCount() != 0){
+            String id = ctx.ID().getText();
+            String value = visit(ctx.inicializacion().opal().or_expr().and_expr().not_expr().comp().exp());
+            
+            tacCode.add(id + " = " + value);
 
-        if(ctx.list_decl().getChildCount() != 0){
-            visit(ctx.list_decl());
+            if(ctx.list_decl().getChildCount() != 0){
+                visit(ctx.list_decl());
+            }
         }
         
         return null;
@@ -342,9 +348,68 @@ public class Walker extends com.example.comp24BaseVisitor<String> {
 
     @Override
     public String visitFuncion_definicion(Funcion_definicionContext ctx) {
-        //imprimirTAC(absoluteFilePath, tacCode);
+        String id = ctx.ID().getText().toUpperCase();
+        tacCode.add(id + ":");
+
+        String return_label = nuevoTmp();
+        tacCode.add("pop " + return_label);
+
+        ArrayList<String> argumentos = new ArrayList<>();
+        
+        // POP de los argumentos
+        if(ctx.lista_argumentos().getChildCount() != 0){
+            String[] list_argumentos = visit(ctx.lista_argumentos()).split(",");
+            argumentos.addAll(argumentos.size(), List.of(list_argumentos));
+        }
+        if(ctx.argumento().getChildCount() != 0){
+            argumentos.add(visit(ctx.argumento()));
+        }
+        for(String s : argumentos){
+            tacCode.add("pop " + s);
+        }
+
+        // Visitamos el bloque de código de la función
+        visit(ctx.bloque());
+
+        // PUSH de la variable de retorno
+        tacCode.add("push " + variable_retornada);
+
+
+        // jump a la variable que contiene la dirección de retorno
+        tacCode.add("jmp " + return_label);
+
+        /*
+        for(String s : tacCode){
+            System.out.println(s);
+        }
+        */
+        imprimirTAC(absoluteFilePath, tacCode);
+        variable_retornada = "";
         return null;
     }
+
+    @Override
+    public String visitArgumento(ArgumentoContext ctx) {
+        return ctx.ID().getText();
+    }
+
+    @Override
+    public String visitLista_argumentos(Lista_argumentosContext ctx) {
+        if(ctx.lista_argumentos().getChildCount() != 0){
+            return visit(ctx.lista_argumentos()) + "," + visit(ctx.argumento());
+        }
+        return visit(ctx.argumento());
+    }
+
+   
+    @Override
+    public String visitReturn(ReturnContext ctx) {
+        variable_retornada = visit(ctx.opal().or_expr().and_expr().not_expr().comp().exp());
+        return variable_retornada;
+    }
+    
+
+    
 
     
 }

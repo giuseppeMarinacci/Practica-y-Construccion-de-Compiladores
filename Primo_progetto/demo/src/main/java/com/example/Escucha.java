@@ -61,7 +61,7 @@ public class Escucha extends comp24BaseListener{
             System.out.println(warnings);
         }
         else{
-            System.out.println("No hay warnings.\n");
+            System.out.println("No hay warnings ni errores.\n");
         }
 
         tablaSimbolos.delContexto(absoluteFilePath);

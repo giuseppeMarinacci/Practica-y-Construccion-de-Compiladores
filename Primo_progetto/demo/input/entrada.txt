@@ -249,3 +249,40 @@ while (i <= 10){
 // i = i + 1        ---
 // jmp L0           GENERAR JUMP DE PRINCIPIO
 // L1:              GENERAR LABEL SALIDA
+
+
+
+/*     LLAMADA A FUNCION     */
+
+int main(){
+	int y;
+
+	y = suma(x, 5); //linea 04
+
+	return 0;
+}
+
+
+// tradución linea 04:
+// push x           GENERAR PUSH DEL PRIMER ARGUMENTO
+// push 5           GENERAR PUSH DEL SEGUNDO ARGUMENTO
+// push L0          GENERAR PUSH DE LA LABEL DE VUELTA
+// jmp suma         GENERAR JUMP + NOMBRE_FUNCION
+// L0:              GENERAR LA LABEL DE VUELTA
+// pop y            GENERAR POP Y ASIGNACION DE LA VARIABLE RETURNADA
+
+
+
+/*     CUERPO DE UNA FUNCION     */
+
+int suma(int a, int b) {
+	return a + b;
+}
+
+// SUMA             GENERAR LA LABEL DE PRINCIPIO DE FUNCION
+// pop t0           GENERAR POP DE LAS VARIABLES AL REVES DE LAS PUSH
+// pop b            GENERAR POP DEL SEGUNDO ARGUMENTO
+// pop a            GENERAR POP DEL PRIMER ARGUMENTO
+// t1 = a + b       ---
+// push t1          GENERAR PUSH DE LA VARIABLE QUE SE DEBE RETURNAR
+// jump t0          GENERAR JUMP A LA PRIMERA VARIABLE "POPADA"
