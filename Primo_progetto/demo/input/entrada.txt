@@ -140,13 +140,66 @@ void main(){
 }
 
 
+/******************************/
+PARA EL LISTENER
+
+int sum (int n, int b1){
+    int c = n + b1; 
+    return c;
+}
+
+int fact (int n, int x, int y, char z, double j, int k){
+    int a;
+
+    a = a + 1;
+
+    for(a = 0; x > 0; y++){
+        n = a;
+    }
+
+    a = sum(n, x);
+
+    return a;
+}
+
+void main(){
+    int ciao = 1, hola = 2, hello = 3;
+
+    ciao = sum(ciao, hola);
+}
+
+
 
 /******************************/
 
 PARA EL VISITOR
 
+**** ASIGNACION ****
 int a = 1, b = 1, c = 1, d = 1, e = 1;
 
 a = (e + 1) / ( - b * --c - 4 - d++ + 1);
 
 b = c + d + 1;
+
+
+**** IF - ELSE ****
+int x, y;
+
+if(x >= 0){
+	y = x;
+    x = x + y;
+    }
+else
+	y = -x;
+    
+
+// t0 = x >= 0      COMPARACION
+// ifjmp t0, L0     GENERAR LABEL
+// y = x            ---
+// t1 = x + y       ---
+// x = t1           ---
+// jmp L1           GENERAR ISTRUCCION ANTES DEL ELSE
+// L0:              GENERAR LABEL
+// t2 = - x         ---
+// y = t2           ---
+// L1:              GENERAR LABEL

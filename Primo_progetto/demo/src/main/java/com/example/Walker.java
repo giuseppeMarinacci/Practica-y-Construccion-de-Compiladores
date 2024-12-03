@@ -5,16 +5,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.comp24Parser.AsignacionContext;
+import com.example.comp24Parser.CoContext;
+import com.example.comp24Parser.CompContext;
 import com.example.comp24Parser.EContext;
+import com.example.comp24Parser.Else_instruccionContext;
 import com.example.comp24Parser.ExpContext;
 import com.example.comp24Parser.TermContext;
 import com.example.comp24Parser.FactorContext;
+import com.example.comp24Parser.Funcion_definicionContext;
+import com.example.comp24Parser.If_instruccionContext;
 import com.example.comp24Parser.ProgramaContext;
 import com.example.comp24Parser.TContext;
 
 public class Walker extends com.example.comp24BaseVisitor<String> {
 
-    private int contador_tmp = 0; // Contador para los registros temporales
+    private int contador_tmp = 0, contador_etq = 0; // Contador para los registros temporales
     private List<String> tacCode = new ArrayList<>(); // Lista para memorizar el Código de Tres Direcciones (TAC)
     String absoluteFilePath = "C:\\Users\\Giuseppe\\Desktop\\Practica y Construccion de Compiladores\\Primo_progetto\\demo\\output\\TAC.txt"; // path del archivo de texto donde se guarda el Código de Tres Direcciones (TAC)
     
@@ -26,10 +31,12 @@ public class Walker extends com.example.comp24BaseVisitor<String> {
         }
     }
 
-    public void imprimirTAC(String filePath, String text) {
+    public void imprimirTAC(String filePath, List<String> tacCode) {
         try {
             java.io.FileWriter fw = new java.io.FileWriter(filePath, true);
-            fw.write(text + "\n");
+            for(String line : tacCode) {
+                fw.write(line + "\n");
+            }
             fw.close();
         } catch (Exception e) {
             throw new RuntimeException("Error al escribir en el archivo");
@@ -38,6 +45,10 @@ public class Walker extends com.example.comp24BaseVisitor<String> {
 
     private String nuevoTmp() {
         return "t" + (contador_tmp++);
+    }
+
+    private String nuevaEtq() {
+        return "L" + (contador_etq++);
     }
 
 
@@ -59,14 +70,16 @@ public class Walker extends com.example.comp24BaseVisitor<String> {
         String id = ctx.ID().getText();
         String value = visit(ctx.opal().or_expr().and_expr().not_expr().comp().exp());
         
-        tacCode.add(id + " = " + value + "\n");
+        tacCode.add(id + " = " + value);
         
+        /*
         for(String s : tacCode) {
             imprimirTAC(absoluteFilePath, s);        
         }
+        
 
         tacCode.clear();
-
+        */
         return null;
     }
 
@@ -174,9 +187,80 @@ public class Walker extends com.example.comp24BaseVisitor<String> {
         if (ctx.RESTA() != null) { // Si el factor es el negativo de una variable
             String operando = visit(ctx.factor());
             factor = nuevoTmp();
-            tacCode.add(factor + " = -" + operando);
+            tacCode.add(factor + " = - " + operando);
         }
 
         return factor;
     }
+
+
+    @Override
+    public String visitIf_instruccion(If_instruccionContext ctx) {
+        String comp = " ";
+        comp = visit(ctx.opal().or_expr().and_expr().not_expr().comp());
+
+        String etq1 = nuevaEtq();
+        tacCode.add("ifjmp " + comp + ", " + etq1);
+
+        visit(ctx.instruccion());
+
+        String etq2 = nuevaEtq();
+        tacCode.add("jmp " + etq2);
+        tacCode.add(etq1 + ":");
+        
+        visit(ctx.else_instruccion());
+        tacCode.add(etq2 + ":");
+
+        /*
+        for(String s : tacCode) {
+            System.out.println(s);        
+        }
+        imprimirTAC(absoluteFilePath, tacCode);
+        */
+
+        return null;
+    }
+
+
+    @Override
+    public String visitElse_instruccion(Else_instruccionContext ctx) {
+        return super.visitElse_instruccion(ctx);
+    }
+
+
+    @Override
+    public String visitComp(CompContext ctx) {
+        String exp = visit(ctx.exp());
+
+        if(ctx.co().getChildCount() == 0){
+            return exp;
+        }
+        else{
+            String co = visit(ctx.co());
+            String tmp = nuevoTmp();
+            tacCode.add(tmp + " = " + exp + " " + co);
+            
+            return tmp;
+        }
+    }
+
+
+    @Override
+    public String visitCo(CoContext ctx) {
+        String co = ctx.COMPARACION().getText();
+        String exp = visit(ctx.exp());
+
+        return co + " " + exp;
+    }
+
+
+    @Override
+    public String visitFuncion_definicion(Funcion_definicionContext ctx) {
+        imprimirTAC(absoluteFilePath, tacCode);
+        return null;
+    }
+
+
+    
+    
 }
